@@ -1,40 +1,48 @@
 const Header = props => <h1>{props.name}</h1> 
+//one object of parts array
+const Part = ( {name, exercises}) => <p> {name} {exercises} </p>
 
-const Part1 = props => <p>{props.name} {props.exercises}</p>
+const Content = ({ parts }) => ( //it takes the parts array as props
+  parts.map(part => {
+    //this is a function that .map applyes to each element
+    return (
+      //for each part element Part element is created
+      //key is a special props for rendering. it should be unique for each
+      //element so part.name is used
+      <Part name={part.name} exercises={part.exercises} key={part.name}/>
+    )
+  })
+)
 
-const Part2 = props => <p>{props.name} {props.exercises}</p>
-
-const Part3 = props => <p>{props.name} {props.exercises}</p>
-
-const Total = props => {
-const totalExercises = props.part1.exercises + props.part2.exercises + props.part3.exercises;
-return <p>Number of exercises {totalExercises}</p>
+const Total = ( {parts} ) => {
+  const countTotal = parts.reduce((sum, part) => sum + part.exercises, 0);
+  return <p>Total number of exercises: {countTotal}</p>;
 }
 
 const App = () => {
-const course = 'Half Stack application development'
-const part1 = {
-  name: 'Fundamentals of React',
-  exercises: 10
-}
-const part2 = {
-  name: 'Using props to pass data',
-  exercises: 7
-}
-const part3 = {
-  name: 'State of a component',
-  exercises: 14
-}
+  const course = 'Half Stack application development'
+  const parts = [
+    {
+      name: 'Fundamentals of React',
+      exercises: 10
+    },
+    {
+      name: 'Using props to pass data',
+      exercises: 7
+    },
+    {
+      name: 'State of a component',
+      exercises: 14
+    }
+  ]
 
-	return (
-		<div>
-		  <Header name={course} />
-      <Part1 name={part1.name} exercises={part1.exercises}/>
-      <Part2 name={part2.name} exercises={part2.exercises}/>
-      <Part3 name={part3.name} exercises={part3.exercises}/>
-      <Total part1={part1} part2={part2} part3={part3}/>
-		</div>
-	)
+  return (
+    <div>
+      <Header name={course} />
+      <Content parts={parts} />
+      <Total parts={parts}/>
+    </div>
+  )
 }
   
 export default App
