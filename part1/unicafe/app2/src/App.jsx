@@ -23,7 +23,9 @@ const App = () => {
   const increaseGood = () => setGood(good + 1)
   const increaseNeutral = () => setNeutral(neutral + 1)
   const increaseBad = () => setBad(bad + 1)
-
+  const total = good + neutral + bad
+  const avarage = total > 0 ? (good - bad) / total : 0
+  const positive = total > 0 ? (good / total) * 100 : 0
   return (
     <div>
       <Header name={name1}/>
@@ -35,6 +37,9 @@ const App = () => {
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
+      <p>All: {total}</p>
+      <p>Avarage: {avarage.toFixed(2)}</p> 
+      <p>Positive: {positive.toFixed(2)}</p>
     </div>
   )
 }
