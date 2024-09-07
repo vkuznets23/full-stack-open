@@ -2,7 +2,19 @@
 import { useState } from 'react'
 
 const Header = (props) => <h1>{props.name}</h1>
-
+const Statistics = ({ good, neutral, bad, total, average, positive }) => {
+  return (
+    <div>
+      <h1>Statistics</h1>
+      <p>Good: {good}</p>
+      <p>Neutral: {neutral}</p>
+      <p>Bad: {bad}</p>
+      <p>All: {total}</p>
+      <p>Average: {average.toFixed(2)}</p> 
+      <p>Positive: {positive.toFixed(2)}</p>
+    </div>
+  )
+}
 const Button = (props) => {
   return (
     <button onClick={props.onClick}>
@@ -12,7 +24,7 @@ const Button = (props) => {
 }
 
 const App = () => {
-  const name1 = 'Give Feedback'
+  const name = 'Give Feedback'
   const name2 = 'Statistic'
 
   const [good, setGood] = useState(0)
@@ -24,22 +36,24 @@ const App = () => {
   const increaseNeutral = () => setNeutral(neutral + 1)
   const increaseBad = () => setBad(bad + 1)
   const total = good + neutral + bad
-  const avarage = total > 0 ? (good - bad) / total : 0
+  const average = total > 0 ? (good - bad) / total : 0
   const positive = total > 0 ? (good / total) * 100 : 0
   return (
     <div>
-      <Header name={name1}/>
+      <Header name={name}/>
       <Button onClick={increaseGood} text='good' />
       <Button onClick={increaseNeutral} text='neutral' />
       <Button onClick={increaseBad} text='bad' />
 
-      <Header name={name2}/>
-      <p>Good: {good}</p>
-      <p>Neutral: {neutral}</p>
-      <p>Bad: {bad}</p>
-      <p>All: {total}</p>
-      <p>Avarage: {avarage.toFixed(2)}</p> 
-      <p>Positive: {positive.toFixed(2)}</p>
+      <Statistics 
+        name={name2}
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        total={total}
+        average={average}
+        positive={positive}
+      />
     </div>
   )
 }
