@@ -2,17 +2,22 @@
 import { useState } from 'react'
 
 const Header = ({title}) => <h1>{title}</h1>
+
+const Statisticline = ( {text, value}) => (
+  <p>{text}: {value}</p>
+)
+
 const Statistics = ({ good, neutral, bad, total, average, positive }) => {
   if (total > 0) {
     return (
       <div>
         <h1>Statistics</h1>
-        <p>Good: {good}</p>
-        <p>Neutral: {neutral}</p>
-        <p>Bad: {bad}</p>
-        <p>All: {total}</p>
-        <p>Average: {average.toFixed(2)}</p> 
-        <p>Positive: {positive.toFixed(2)}</p>
+        <Statisticline text="Good" value={good} />
+        <Statisticline text="Neutral" value={neutral} />
+        <Statisticline text="Bad" value={bad} />
+        <Statisticline text="All" value={total} />
+        <Statisticline text="Avarage" value={average.toFixed(2)} />
+        <Statisticline text="Positive" value={positive.toFixed(2)} />
       </div>
     )
   }
