@@ -21,7 +21,7 @@ setSelected is the function that you use to change the value of selected.
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0)) // track votes for each anecdote
    
   // Function to add a vote to the current anecdote
-   const addVote = () => {
+  const addVote = () => {
     const newVotes = [...votes];  // Copy the votes array
     newVotes[selected] += 1;  // Increment vote for the selected anecdote
     setVotes(newVotes);  // Update the votes state
@@ -32,12 +32,22 @@ setSelected is the function that you use to change the value of selected.
     setSelected(random) 
   }
 
+  // Function to find the index of the anecdote with the most votes
+  const mostVotedIndex = () => {
+    const maxVotes = Math.max(...votes);
+    return votes.indexOf(maxVotes);
+  };
+
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p> {/* Show votes for the currently selected anecdote */}
       <button onClick={addVote}>Vote</button>
       <button onClick={randomAnecdote}>Next Anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      <p>{anecdotes[mostVotedIndex()]}</p>
+      <p>has {votes[mostVotedIndex()]} votes</p>
     </div>
   )
 }
