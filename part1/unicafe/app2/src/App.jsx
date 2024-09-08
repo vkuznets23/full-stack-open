@@ -4,7 +4,10 @@ import { useState } from 'react'
 const Header = ({title}) => <h1>{title}</h1>
 
 const Statisticline = ( {text, value}) => (
-  <p>{text}: {value}</p>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 )
 
 const Statistics = ({ good, neutral, bad, total, average, positive }) => {
@@ -12,12 +15,16 @@ const Statistics = ({ good, neutral, bad, total, average, positive }) => {
     return (
       <div>
         <h1>Statistics</h1>
-        <Statisticline text="Good" value={good} />
-        <Statisticline text="Neutral" value={neutral} />
-        <Statisticline text="Bad" value={bad} />
-        <Statisticline text="All" value={total} />
-        <Statisticline text="Avarage" value={average.toFixed(2)} />
-        <Statisticline text="Positive" value={positive.toFixed(2)} />
+        <table>
+          <tbody>
+            <Statisticline text="Good" value={good} />
+            <Statisticline text="Neutral" value={neutral} />
+            <Statisticline text="Bad" value={bad} />
+            <Statisticline text="All" value={total} />
+            <Statisticline text="Avarage" value={average.toFixed(2)} />
+            <Statisticline text="Positive" value={positive.toFixed(2)} />
+          </tbody>
+        </table>
       </div>
     )
   }
