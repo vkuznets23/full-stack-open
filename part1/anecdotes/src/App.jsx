@@ -18,6 +18,14 @@ const App = () => {
 setSelected is the function that you use to change the value of selected.
   When you call setSelected(random), you're telling React to update the selected state 
   with the value stored in the random variable. */
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0)) // track votes for each anecdote
+   
+  // Function to add a vote to the current anecdote
+   const addVote = () => {
+    const newVotes = [...votes];  // Copy the votes array
+    newVotes[selected] += 1;  // Increment vote for the selected anecdote
+    setVotes(newVotes);  // Update the votes state
+  };
 
   const randomAnecdote = () => {
     const random = Math.floor(Math.random() * anecdotes.length);
@@ -27,9 +35,13 @@ setSelected is the function that you use to change the value of selected.
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p> {/* Show votes for the currently selected anecdote */}
+      <button onClick={addVote}>Vote</button>
       <button onClick={randomAnecdote}>Next Anecdote</button>
     </div>
   )
 }
 
 export default App
+
+
