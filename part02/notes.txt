@@ -1,0 +1,98 @@
+//Create the app
+npm create vite@latest my-app
+npm install 
+npm run dev
+
+
+//the browser-side application logic
+const App = (props) => {
+  const { notes } = props
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        <li>{notes[0].content}</li>   => better version: notes.map(note => <li>{note.content}</li>)
+        <li>{notes[1].content}</li>
+        <li>{notes[2].content}</li>
+      </ul>
+    </div>
+  )
+}
+
+=======>
+const App = (props) => {
+  const { notes } = props
+
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note => 
+
+          <li key={note.id}> ==> key is IMPORTANT for the .map method
+         
+                                might be presented like this:
+                                note => <li key={note.id}>{note.content}</li>
+            {note.content}
+          </li>
+        )} 
+      </ul>
+    </div>
+  )
+}
+
+export default App
+
+_________________________
+BETTER VERSION OF THE PREVIOUS ONE:
+
+const Note = ({ note }) => {
+  return (
+    <li>{note.content}</li>
+  )
+}
+
+const App = ({ notes }) => {
+  return (
+    <div>
+      <h1>Notes</h1>
+      <ul>
+
+        {notes.map(note => 
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+    </div>
+  )
+}
+
+
+//and the main.jsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+import App from './App'
+
+const notes = [
+  {
+    id: 1,
+    content: 'HTML is easy',
+    important: true
+  },
+  {
+    id: 2,
+    content: 'Browser can execute only JavaScript',
+    important: false
+  },
+  {
+    id: 3,
+    content: 'GET and POST are the most important methods of HTTP protocol',
+    important: true
+  }
+]
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <App notes={notes} />
+)
+
