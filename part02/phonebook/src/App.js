@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Form from './components/form.js'
 import Filter from './components/filter.js'
 import Numbers from './components/numbers.js'
+import axios from 'axios'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -10,6 +11,19 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+
+  useEffect(() => {
+    console.log('effect');
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log('promise fulfilled')
+        setPersons(response.data)
+      .catch(error => {
+        console.log("Error fetching data:", error);
+      })
+      })
+  }, [])
 
   return (
     <div>
