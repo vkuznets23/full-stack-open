@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Form from './components/form.js'
 import Filter from './components/filter.js'
 import Numbers from './components/numbers.js'
-import axios from 'axios'
+import personsServices from './services/persons.js'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -14,8 +14,8 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect');
-    axios
-      .get('http://localhost:3001/persons')
+    personsServices
+      .getAll()
       .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
