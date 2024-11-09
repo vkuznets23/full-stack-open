@@ -1,7 +1,7 @@
-import React from 'react';
 import personsServices from '../services/persons.js'
 
-const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons}) => {
+const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons, setNotificationMessage}) => {
+
     const addPerson = (event) => {
         event.preventDefault();
         const newPerson = {
@@ -21,14 +21,18 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
               setPersons(persons.concat(response.data))
               setNewName('') //clear input field
               setNewNumber('')
-              console.log(response)
+              setNotificationMessage(`${newPerson.name} ${newPerson.number} was added to the list`)
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, 3000)
+      
             })
             .catch(error => {
               console.error("Error adding person", error);
             });
         }
         else {
-          const confirmDelete = window.confirm(`Are you sure you want to delete ${exist.name} person?`);
+          const confirmDelete = window.confirm(`Are you sure you want to update ${exist.name}'s number?`);
 
           if (confirmDelete) {
             personsServices
@@ -40,6 +44,10 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
                 ));
                 setNewName('');
                 setNewNumber('');
+                setNotificationMessage(`${newPerson.name}'s number was updated`)
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, 3000)
               })
               .catch(error => {
                 console.error("Error updating person", error);

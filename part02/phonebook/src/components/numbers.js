@@ -1,8 +1,10 @@
 import React from "react";
 import personsService from "../services/persons";
 
-const Numbers = ( {persons, setPersons, search} ) => {
-        const filterPersons = persons.filter(person => {
+
+const Numbers = ( {persons, setPersons, search, setNotificationMessage } ) => {
+
+    const filterPersons = persons.filter(person => {
         // Ensure both name and number are strings before checking includes
         const nameMatches = person.name ? person.name.toLowerCase().includes(search.toLowerCase()) : false;
         const numberMatches = person.number ? person.number.includes(search) : false;
@@ -17,6 +19,10 @@ const Numbers = ( {persons, setPersons, search} ) => {
         personsService
           .deletePerson(id)
           .then(response => {
+            setNotificationMessage(`${persons.name}'s number was deleted`)
+            setTimeout(() => {
+              setNotificationMessage(null)
+            }, 3000)
             console.log("Person deleted:", response);
             setPersons(persons.filter(person => person.id !== id))
           })
