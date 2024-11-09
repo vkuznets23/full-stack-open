@@ -1,4 +1,3 @@
-
 import React from 'react';
 import personsServices from '../services/persons.js'
 
@@ -50,7 +49,7 @@ return (
         <div>
           <button type="submit">add</button>
         </div>
-      </form>
+    </form>
     )
 }
 
