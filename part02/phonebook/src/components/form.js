@@ -13,7 +13,7 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
           alert("Both name and phone number must be provided.");
           return;
         }
-        const exist = persons.some(person => person.name === newPerson.name)
+        const exist = persons.find(person => person.name === newPerson.name)
         if (!exist) {
           personsServices
             .create(newPerson)
@@ -28,7 +28,23 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
             });
         }
         else {
-          alert(`${newName} is already added to phonebook`)
+          const confirmDelete = window.confirm(`Are you sure you want to delete ${exist.name} person?`);
+
+          if (confirmDelete) {
+            personsServices
+              .update(exist.id, {...exist, number: newNumber})
+              .then(response => {
+                console.log("Person updated:", response.data)
+                setPersons(persons.map(person => 
+                  person.id === exist.id ? response.data : person
+                ));
+                setNewName('');
+                setNewNumber('');
+              })
+              .catch(error => {
+                console.error("Error updating person", error);
+              });
+          }
         }
     }
 
