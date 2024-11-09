@@ -1,9 +1,13 @@
+import axios from 'axios';
 import React from 'react';
 
 const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons}) => {
-    const addPerson = (e) => {
-        e.preventDefault();
-        const newPerson = {name: newName, number: newNumber};
+    const addPerson = (event) => {
+        event.preventDefault();
+        const newPerson = {
+          name: newName,
+          number: newNumber,
+        };
         
         if (!newName || !newNumber || !isFinite(newNumber)) {
         alert("Both name and phone number must be provided.");
@@ -18,6 +22,18 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
         else {
         alert(`${newName} is already added to phonebook`)
         }
+
+        axios
+          .post('http://localhost:3001/persons', newPerson)
+          .then(response => {
+            setPersons(persons.concat(response.data))
+            setNewName('') //clear input field
+            setNewNumber('')
+            console.log(response)
+          })
+          .catch(error => {
+            console.error("Error adding person", error);
+          });
     }
 
 return (
