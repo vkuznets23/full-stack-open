@@ -1,5 +1,6 @@
-import axios from 'axios';
+
 import React from 'react';
+import personsServices from '../services/persons.js'
 
 const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons}) => {
     const addPerson = (event) => {
@@ -10,30 +11,26 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
         };
         
         if (!newName || !newNumber || !isFinite(newNumber)) {
-        alert("Both name and phone number must be provided.");
-        return;
+          alert("Both name and phone number must be provided.");
+          return;
         }
         const exist = persons.some(person => person.name === newPerson.name)
         if (!exist) {
-        setPersons(persons.concat(newPerson));
-        setNewName('');
-        setNewNumber('');
+          personsServices
+            .create(newPerson)
+            .then(response => {
+              setPersons(persons.concat(response.data))
+              setNewName('') //clear input field
+              setNewNumber('')
+              console.log(response)
+            })
+            .catch(error => {
+              console.error("Error adding person", error);
+            });
         }
         else {
-        alert(`${newName} is already added to phonebook`)
+          alert(`${newName} is already added to phonebook`)
         }
-
-        axios
-          .post('http://localhost:3001/persons', newPerson)
-          .then(response => {
-            setPersons(persons.concat(response.data))
-            setNewName('') //clear input field
-            setNewNumber('')
-            console.log(response)
-          })
-          .catch(error => {
-            console.error("Error adding person", error);
-          });
     }
 
 return (
