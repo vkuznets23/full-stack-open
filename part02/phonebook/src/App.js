@@ -19,10 +19,10 @@ const App = () => {
       .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
+      })
       .catch(error => {
         console.log("Error fetching data:", error);
-      })
-      })
+      });
   }, [])
 
   return (
