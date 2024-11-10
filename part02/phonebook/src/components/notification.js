@@ -1,15 +1,15 @@
 import React from "react"
 
-const MasgError = ({ message }) => {
+const Notification = ({ message }) => {
     if (message === null) {
       return null
     }
   
     return (
-      <div className={`error ${message ? 'show' : ''}`}>
+      <div className={`notification ${message ? 'show' : ''}`}>
         {message}
       </div>
     )
   }
 
-export default MasgError;
+export default Notification;

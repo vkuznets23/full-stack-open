@@ -19,7 +19,7 @@ const Numbers = ( {persons, setPersons, search, setNotificationMessage } ) => {
         personsService
           .deletePerson(id)
           .then(response => {
-            setNotificationMessage(`${persons.name}'s number was deleted`)
+            setNotificationMessage(`${name}'s number was deleted`)
             setTimeout(() => {
               setNotificationMessage(null)
             }, 3000)
