@@ -1,98 +1,30 @@
 //Create the app
+npx create-react-app my-app
+cd my-app
+npm run dev
+OR
 npm create vite@latest my-app
-npm install 
+cd my-app
+npm install
 npm run dev
 
 
-//the browser-side application logic
-const App = (props) => {
-  const { notes } = props
 
-  return (
-    <div>
-      <h1>Notes</h1>
-      <ul>
-        <li>{notes[0].content}</li>   => better version: notes.map(note => <li>{note.content}</li>)
-        <li>{notes[1].content}</li>
-        <li>{notes[2].content}</li>
-      </ul>
-    </div>
-  )
-}
+//create db
+npm install json-server --save-dev
+create .json file
+json-server --port 3001 --watch db.json
+npm run server
 
-=======>
-const App = (props) => {
-  const { notes } = props
-
-  return (
-    <div>
-      <h1>Notes</h1>
-      <ul>
-        {notes.map(note => 
-
-          <li key={note.id}> ==> key is IMPORTANT for the .map method
-         
-                                might be presented like this:
-                                note => <li key={note.id}>{note.content}</li>
-            {note.content}
-          </li>
-        )} 
-      </ul>
-    </div>
-  )
-}
-
-export default App
-
-_________________________
-BETTER VERSION OF THE PREVIOUS ONE:
-
-const Note = ({ note }) => {
-  return (
-    <li>{note.content}</li>
-  )
-}
-
-const App = ({ notes }) => {
-  return (
-    <div>
-      <h1>Notes</h1>
-      <ul>
-
-        {notes.map(note => 
-          <Note key={note.id} note={note} />
-        )}
-      </ul>
-    </div>
-  )
-}
-
-
-//and the main.jsx
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-
-import App from './App'
-
-const notes = [
-  {
-    id: 1,
-    content: 'HTML is easy',
-    important: true
-  },
-  {
-    id: 2,
-    content: 'Browser can execute only JavaScript',
-    important: false
-  },
-  {
-    id: 3,
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    important: true
-  }
-]
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <App notes={notes} />
-)
+//add axios library
+npm install axios
+create service file and define API methods for CRUD
+EXAMPLE:
+import axios from 'axios';
+const baseUrl = 'http://localhost:3001/persons';
+const getAll = () => axios.get(baseUrl).then(response => response.data);
+const create = (newPerson) => axios.post(baseUrl, newPerson).then(response => response.data);
+const update = (id, updatedPerson) => axios.put(`${baseUrl}/${id}`, updatedPerson).then(response => response.data);
+const remove = (id) => axios.delete(`${baseUrl}/${id}`).then(response => response.data);
+export default { getAll, create, update, remove };
 
