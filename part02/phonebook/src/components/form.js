@@ -1,6 +1,6 @@
 import personsServices from '../services/persons.js'
 
-const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons, setNotificationMessage}) => {
+const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons, setNotificationMessage, setErrorMessage }) => {
 
     const addPerson = (event) => {
         event.preventDefault();
@@ -29,6 +29,8 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
             })
             .catch(error => {
               console.error("Error adding person", error);
+              setErrorMessage("Failed to add the contact. Please try again.");
+              setTimeout(() => setErrorMessage(null), 3000);
             });
         }
         else {
@@ -51,6 +53,9 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
               })
               .catch(error => {
                 console.error("Error updating person", error);
+                setErrorMessage(`The contact ${exist.name} was already deleted from the server.`);
+                setTimeout(() => setErrorMessage(null), 3000);
+                setPersons(persons.filter(person => person.id !== exist.id))
               });
           }
         }
