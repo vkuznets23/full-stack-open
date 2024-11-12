@@ -28,3 +28,7 @@ const update = (id, updatedPerson) => axios.put(`${baseUrl}/${id}`, updatedPerso
 const remove = (id) => axios.delete(`${baseUrl}/${id}`).then(response => response.data);
 export default { getAll, create, update, remove };
 
+//create a new template for app
+npm init -> will automatically generate package.json file
+then when file aka starting point is ready we can do: node filename.js OR npm start OR npm test (when we have test file)
+
