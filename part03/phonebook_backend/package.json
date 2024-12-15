@@ -1,0 +1,20 @@
+{
+  "name": "phonebook_backend",
+  "version": "1.0.0",
+  "main": "persons.js",
+  "scripts": {
+    "start": "node persons.js",
+    "dev": "nodemon persons.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "json-server": "^1.0.0-beta.3",
+    "nodemon": "^3.1.9"
+  }
+}
