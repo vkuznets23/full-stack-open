@@ -1,7 +1,11 @@
-const express = require('express')
+const express = require('express');
+const morgan = require('morgan');
 const app = express()
 
 app.use(express.json()) //json-parser
+
+morgan.token('jsonData', (req, res) => JSON.stringify(req.body))
+app.use(morgan(':method :url :status :response-time ms - :res[content-length] :jsonData'));
 
 let contacts = [
   { 
@@ -26,26 +30,22 @@ let contacts = [
   }
 ];
 
-app.get('/api/persons', (request, resnonse) => {
-  resnonse.json(contacts)
+//GET all persons
+app.get('/api/persons', (req, res) => {
+  res.json(contacts)
 })
 
+//GET person by id
 app.get('/api/persons/:id', (req, res) => {
-  //var that extracts id from the URL
-  //need to filter all contacts to find the exact id
-  //if data exists
-    //show the data
-  //else
-    //show 404 error
   const id = req.params.id
-  const contact = contacts.filter(contact => contact.id===id)
-  if (contact) {
-    res.json(contact)
-  } else {
-    res.json(404).end() //It signals to the client that the server has finished sending data for the response
+  const contact = contacts.find(contact => contact.id===id)
+  if (!contact) {
+    return res.status(404).end()
   }
+  return res.json(contact)
 })
 
+//GET info about phonebook
 app.get('/info', (req, res) => {
   const contactsAmount = contacts.length;
   const data = new Date();
@@ -55,47 +55,47 @@ app.get('/info', (req, res) => {
   `);
 })
 
+//DELETE person by id
 app.delete('/api/persons/:id', (req, res) => {
-  //create exctracted id
-  // filter the contacts to skip all contacts that dont match the id
-  //print the 204 code -> no content
-
   const id = req.params.id
   contacts = contacts.filter(contact => contact.id !== id)
   res.status(204).end()
 })
 
 const generateId = () => {
-  return Math.floor(Math.random() * 10000)
+  let id;
+  do {
+    id = Math.floor(Math.random() * 10000)
+  } while (contacts.some(contact => contact.id === id))
+  return id;
 }
 
+// POST to add a new person
 app.post('/api/persons', (req, res) => {
   const { name, number } = req.body
-  //this will mean this:
-  //req.body = {
-  //name: "John Doe",
-  //number: "123-456-789"
-  //};
+
+  // Validate data
   if (!name || !number) {
     return res.status(400).json ({
       error: 'name and number are required'
-    })
+    });
   }
 
+  // Check for duplicate names
   const nameExist = contacts.find(contact => contact.name === name)
   if (nameExist) {
     return res.status(400).json({
       error: 'Name must be unique. This name already exists in the phonebook.'
     });
   }
-  // if no name or number -> error msg
-  // if name already exists -> error msg
+  
   const contact = {
     name: name,
     number: number,
     id: generateId()
   }
   
+  // Add contact to the array
   contacts = contacts.concat(contact)
   res.json(contact)
 })
