@@ -4,9 +4,10 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
 
     const addPerson = (event) => {
         event.preventDefault();
+
         const newPerson = {
-          name: newName,
-          number: newNumber,
+          name: newName.trim(),
+          number: newNumber.trim(),
         };
         
         if (!newName || !newNumber || !isFinite(newNumber)) {
