@@ -73,7 +73,7 @@ app.put('/api/persons/:id', (req, res) => {
   }
 
   // Check if contact exists
-  const contactIndex = contacts.filter(contact => contact.id === id)
+  const contactIndex = contacts.findIndex(contact => contact.id === id)
   if (contactIndex === -1) {
     return res.status(404).json({ error: 'Contact not found.' });
   }
