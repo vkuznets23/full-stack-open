@@ -1,5 +1,7 @@
 import axios from 'axios'
-const baseUrl = 'https://phonebook-toc1.onrender.com/api/persons'
+const baseUrl = process.env.NODE_ENV === 'development'
+? 'http://localhost:3002/api/persons' // Local URL for development
+:'https://phonebook-toc1.onrender.com/api/persons'
 
 const getAll = () => {
     return axios.get(baseUrl)
