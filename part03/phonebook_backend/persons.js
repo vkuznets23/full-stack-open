@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
@@ -13,7 +15,7 @@ app.use(cors());
 morgan.token('jsonData', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] :jsonData'));
 
-const password = process.argv[2];
+const password = process.env.MONGODB_PASSWORD;
 if (!password) {
   console.log('Please provide the password as an argument: node mongo.js <password>');
   process.exit(1);
