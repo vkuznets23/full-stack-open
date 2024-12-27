@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // Get the password from command-line arguments
-const password = process.argv[2];
+const password = process.env.MONGODB_PASSWORD;
 
 // Check if the password is provided
 if (!password) {
