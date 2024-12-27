@@ -1,34 +1,28 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const errorHandler = require('./errorHandler');
 const app = express()
 
 app.use(express.json()) //json-parser
 
 const cors = require('cors');
-
 // Enable CORS for all routes
 app.use(cors());
 
 morgan.token('jsonData', (req, res) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] :jsonData'));
 
-// Replace <db_password> with your actual MongoDB password
 const password = process.argv[2];
-// Check if the password is provided
 if (!password) {
   console.log('Please provide the password as an argument: node mongo.js <password>');
   process.exit(1);
 }
 
 const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority`;
-
-mongoose.connect(dbUri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('Failed to connect to MongoDB:', err));
+mongoose.connect(dbUri)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Failed to connect to MongoDB:', err));
 
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
@@ -48,7 +42,7 @@ app.get('/api/persons', async (req, res) => {
 });
 
 //GET person by id
-app.get('/api/persons/:id', async (req, res) => {
+app.get('/api/persons/:id', async (req, res, next) => {
   try {
       const contact = await Contact.findById(req.params.id);
       if (!contact) {
@@ -56,12 +50,12 @@ app.get('/api/persons/:id', async (req, res) => {
       }
       res.json(contact);
   } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch contact' });
+      next(error);
   }
 });
 
 //GET info about phonebook
-app.get('/info', async (req, res) => {
+app.get('/info', async (req, res, next) => {
   try {
     const count = await Contact.countDocuments({});
     res.send(`
@@ -69,12 +63,12 @@ app.get('/info', async (req, res) => {
       <p>${new Date()}</p>
     `);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve information' });
+    next(error);
   }
 });
 
 //UPDATE persons detail
-app.put('/api/persons/:id', async (req, res) => {
+app.put('/api/persons/:id', async (req, res, next) => {
   console.log("Updating contact with id:", req.params.id);
   console.log("Request body:", req.body);
   const { name, number } = req.body;
@@ -94,12 +88,12 @@ app.put('/api/persons/:id', async (req, res) => {
       }
       res.json(updatedContact);
   } catch (error) {
-      res.status(500).json({ error: 'Failed to update contact' });
+      next(error);
   }
 });
 
 //DELETE person by id
-app.delete('/api/persons/:id', async (req, res) => {
+app.delete('/api/persons/:id', async (req, res, next) => {
   try {
     const deletedContact = await Contact.findByIdAndDelete(req.params.id);
     if (!deletedContact) {
@@ -108,12 +102,12 @@ app.delete('/api/persons/:id', async (req, res) => {
     res.status(200).json({ message: 'Contact deleted successfully' });
   } catch (error) {
     console.error('Error deleting contact:', error);
-    res.status(500).json({ error: 'Failed to delete contact' });
+    next(error);
   }
 });
 
 // POST to add a new person
-app.post('/api/persons', async (req, res) => {
+app.post('/api/persons', async (req, res, next) => {
   const { name, number } = req.body;
 
   // Validate data
@@ -133,9 +127,11 @@ app.post('/api/persons', async (req, res) => {
     res.status(201).json(savedContact); // Respond with the saved contact
   } catch (error) {
     console.error('Error saving contact to MongoDB:', error.message); // Log the error
-    res.status(500).json({ error: 'Failed to save contact' }); // Respond with an error message
+    next(error);
   }
 });
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3002
 app.listen(PORT, () => {
