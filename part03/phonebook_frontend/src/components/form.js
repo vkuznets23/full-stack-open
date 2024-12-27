@@ -38,12 +38,18 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
           const confirmDelete = window.confirm(`Are you sure you want to update ${exist.name}'s number?`);
 
           if (confirmDelete) {
+
+            const updatedPerson = {
+              ...exist, 
+              number: newNumber.trim()
+            };
+
             personsServices
-              .update(exist.id, {...exist, number: newNumber})
+              .update(exist._id, updatedPerson)
               .then(response => {
                 console.log("Person updated:", response.data)
                 setPersons(persons.map(person => 
-                  person.id === exist.id ? response.data : person
+                  person._id === exist._id ? response.data : person
                 ));
                 setNewName('');
                 setNewNumber('');
@@ -56,7 +62,7 @@ const Form = ({newName, setNewName, newNumber, setNewNumber, persons, setPersons
                 console.error("Error updating person", error);
                 setErrorMessage(`The contact ${exist.name} was already deleted from the server.`);
                 setTimeout(() => setErrorMessage(null), 3000);
-                setPersons(persons.filter(person => person.id !== exist.id))
+                setPersons(persons.filter(person => person._id !== exist._id))
               });
           }
         }
