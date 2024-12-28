@@ -4,7 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const errorHandler = require('./errorHandler');
-const app = express()
+const app = express();
 
 app.use(express.json()) //json-parser
 
@@ -30,6 +30,7 @@ const contactSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   number: { type: String, required: true, trim: true },
 });
+contactSchema.index({ name: 1 });
 
 const Contact = mongoose.model('Contact', contactSchema);
 
@@ -39,7 +40,7 @@ app.get('/api/persons', async (req, res) => {
       const contacts = await Contact.find({}).sort({ name: 1 });
       res.json(contacts);
   } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch contacts' });
+      next(error);
   }
 });
 
