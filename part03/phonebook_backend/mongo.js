@@ -13,7 +13,7 @@ if (!password) {
 const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority`;
 
 // Connect to MongoDB
-mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(dbUri)
   .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -24,7 +24,12 @@ mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // Define the schema and model
 const contactSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: [3, 'Name must be at least 3 characters long']
+  },
   number: String,
 });
 

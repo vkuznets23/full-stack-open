@@ -27,8 +27,23 @@ mongoose.connect(dbUri)
   .catch(err => console.error('Failed to connect to MongoDB:', err));
 
 const contactSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  number: { type: String, required: true, trim: true },
+  name: { 
+    type: String,
+    required: true,
+    trim: true,
+    minlength: [3, 'must be at least 3 characters long']
+  },
+  number: { 
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: function (value) {
+        return /^\d{2,3}-\d+$/.test(value) && value.length >= 8 && value.length <= 15; // Regex check and length
+      },
+      message: props => `${props.value} is not a valid phone number! Phone number must be at least 8 characters long and in the format +XXX-XXXXXXX or XX-XXXXXXX.`,
+    },
+  },
 });
 contactSchema.index({ name: 1 });
 
@@ -72,8 +87,6 @@ app.get('/info', async (req, res, next) => {
 
 //UPDATE persons detail
 app.put('/api/persons/:id', async (req, res, next) => {
-  console.log("Updating contact with id:", req.params.id);
-  console.log("Request body:", req.body);
   const { name, number } = req.body;
 
   if (!name || !number) {
@@ -81,14 +94,16 @@ app.put('/api/persons/:id', async (req, res, next) => {
   }
 
   try {
-      const updatedContact = await Contact.findByIdAndUpdate(
-          req.params.id,
-          { name, number },
-          { new: true, runValidators: true }
-      );
-      if (!updatedContact) {
+      const contact = await Contact.findById(req.params.id);
+      if (!contact) {
           return res.status(404).json({ error: 'Contact not found' });
       }
+      // Manually update fields and validate them
+      contact.name = name;
+      contact.number = number;
+
+      const updatedContact = await contact.save(); // Validation happens here
+
       res.json(updatedContact);
   } catch (error) {
       next(error);
