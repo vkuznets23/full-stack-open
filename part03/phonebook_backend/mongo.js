@@ -11,6 +11,7 @@ if (!password) {
 
 // Define the MongoDB URI
 const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority`;
+mongoose.set('strictQuery', false);
 
 // Connect to MongoDB
 mongoose.connect(dbUri)
@@ -30,7 +31,17 @@ const contactSchema = new mongoose.Schema({
     trim: true,
     minlength: [3, 'Name must be at least 3 characters long']
   },
-  number: String,
+  number: {
+    type: String,
+    required: true,
+    trim: true,
+    validate: {
+      validator: function (value) {
+        return /^\d{2,3}-\d+$/.test(value) && value.length >= 8 && value.length <= 15; // Regex check and length
+      },
+      message: props => `${props.value} is not a valid phone number! Phone number must be at least 8 characters long and in the format +XXX-XXXXXXX or XX-XXXXXXX.`,
+    },
+  },
 });
 
 const Contact = mongoose.model('Contact', contactSchema);
