@@ -1,17 +1,17 @@
 # Phonebook Application
 
-This is a full-stack web application for managing a phonebook, where users can add, update, and delete contacts. The app features both a backend (Node.js/Express) and a frontend (React), connected to a MongoDB database. The project is designed to showcase how to build and deploy a web app with a backend and frontend, implementing essential features like CRUD operations, form validation, and deployment to Render.
+This is a full-stack web application for managing a phonebook, where users can add, update, and delete contacts. The app features both a backend (Node.js/Express) and a frontend (React), connected to a MongoDB database. The project is designed to showcase how to build and deploy a web app with a backend and front end, implementing essential features like CRUD operations, form validation, and deployment to Render.
 
 ## Technologies Used
 
 - **Backend:**
   - **Node.js**: JavaScript runtime for building the backend API.
   - **Express.js**: Web framework for building the API and handling HTTP requests.
-  - **MongoDB**: NoSQL database used for storing contact data.
+  - **MongoDB**: NoSQL database is used to store contact data.
   - **Mongoose**: Object Data Modeling (ODM) library for MongoDB to simplify data interaction and validation.
-  - **Render**: Cloud platform for deploying the backend API.
+  - **Render**: A cloud platform for deploying the backend API.
   - **Morgan**: HTTP request logger middleware for Node.js.
-  - **CORS**: Middleware for enabling cross-origin requests between frontend and backend.
+  - **CORS**: Middleware is used to enable cross-origin requests between the front end and back end.
 
 - **Frontend:**
   - **React.js**: JavaScript library for building user interfaces, used for creating the dynamic frontend of the application.
@@ -67,7 +67,7 @@ cd phonebook_backend
 npm start
 ```
 
-The backend should now be running on http://localhost:3002 and the frontend on http://localhost:3000.
+The backend should now be running on http://localhost:3002 (you can try ~/info or ~/api/persons etc.) the frontend on http://localhost:3000.
 
 ## Deployment
-The backend and frontend are deployed on Render and MongoDB Atlas. You can access the deployed app https://phonebook-app-ey5a.onrender.com/
+The backend and front end are deployed on Render and MongoDB Atlas. You can access the deployed app https://phonebook-app-ey5a.onrender.com/
