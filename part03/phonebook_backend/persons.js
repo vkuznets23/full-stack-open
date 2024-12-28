@@ -6,13 +6,13 @@ const mongoose = require('mongoose');
 const errorHandler = require('./errorHandler');
 const app = express();
 
-app.use(express.json()) //json-parser
+app.use(express.json()); //json-parser
 
 const cors = require('cors');
 // Enable CORS for all routes
 app.use(cors());
 
-morgan.token('jsonData', (req, res) => JSON.stringify(req.body))
+morgan.token('jsonData', (req) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] :jsonData'));
 
 const password = process.env.MONGODB_PASSWORD;
@@ -21,7 +21,8 @@ if (!password) {
   process.exit(1);
 }
 
-const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority`;
+const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority&connectTimeoutMS=10000&socketTimeoutMS=45000&maxPoolSize=50`;
+mongoose.set('strictQuery', false);
 mongoose.connect(dbUri)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Failed to connect to MongoDB:', err));
@@ -50,7 +51,7 @@ contactSchema.index({ name: 1 });
 const Contact = mongoose.model('Contact', contactSchema);
 
 //GET all persons
-app.get('/api/persons', async (req, res) => {
+app.get('/api/persons', async (req, res, next) => {
   try {
       const contacts = await Contact.find({}).sort({ name: 1 });
       res.json(contacts);
@@ -151,7 +152,7 @@ app.post('/api/persons', async (req, res, next) => {
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3002
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+  console.log(`Server running on port ${PORT}`);
+});
