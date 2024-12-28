@@ -1,6 +1,6 @@
 
 const errorHandler = (err, req, res, next) => {
-    console.error(err.message)
+    console.error(err.message);
 
     if (err.name === 'ValidationError') {
         // Handle specific validation errors
@@ -25,6 +25,9 @@ const errorHandler = (err, req, res, next) => {
     res.status(500).json({
         error: 'Something went wrong. Please try again later.',
     });
-}
+
+    // Use the next function only if necessary
+    if (next) next(); // To satisfy ESLint
+};
 
 module.exports = errorHandler;
