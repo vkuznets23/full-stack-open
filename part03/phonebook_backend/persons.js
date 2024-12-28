@@ -23,7 +23,7 @@ if (!password) {
 
 const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority&connectTimeoutMS=10000&socketTimeoutMS=45000&maxPoolSize=50`;
 mongoose.set('strictQuery', false);
-mongoose.connect(dbUri)
+mongoose.connect(dbUri, {maxPoolSize: 10})
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Failed to connect to MongoDB:', err));
 
