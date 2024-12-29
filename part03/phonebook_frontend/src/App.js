@@ -8,6 +8,7 @@ import Modal from "./components/modal.js";
 import Form from './components/form.js';
 
 import './styles.css';
+import './loader.css';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -38,10 +39,14 @@ const App = () => {
   if (isLoading) {
     // Show loading spinner or message
     return (
-      <div style={{ textAlign: 'center', marginTop: '50px' }}>
-        <h2>Loading...</h2>
-        <div className="spinner"></div> {/* Add CSS for this spinner */}
+      <div className="phonebook-loader-container">
+      <div className="phonebook-loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
+    </div>
     );
   }
 
