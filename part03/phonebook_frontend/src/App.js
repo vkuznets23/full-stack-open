@@ -7,25 +7,27 @@ import Notification from './components/notification.js';
 import MasgError from './components/error.js';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '39445323523'}
-  ]) 
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
-  const [search, setSearch] = useState('')
+  const [persons, setPersons] = useState([]);
+  const [newName, setNewName] = useState('');
+  const [newNumber, setNewNumber] = useState('');
+  const [search, setSearch] = useState('');
   const [notificationMessage, setNotificationMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log('effect');
     personsServices
       .getAll()
       .then(response => {
         console.log('promise fulfilled')
         setPersons(response.data)
+        setIsLoading(false)
       })
       .catch(error => {
         console.log("Error fetching data:", error);
+        setErrorMessage('Failed to fetch data.');
+        setTimeout(() => setErrorMessage(null), 3000);
+        setIsLoading(false);
       });
   }, [])
 
@@ -39,6 +41,16 @@ const App = () => {
     setTimeout(() => setErrorMessage(null), 3000);
   };
 
+  if (isLoading) {
+    // Show loading spinner or message
+    return (
+      <div style={{ textAlign: 'center', marginTop: '50px' }}>
+        <h2>Loading...</h2>
+        <div className="spinner"></div> {/* Add CSS for this spinner */}
+      </div>
+    );
+  }
+  
   return (
     <div>
       <h2>Phonebook</h2>
