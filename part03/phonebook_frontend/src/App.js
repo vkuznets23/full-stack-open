@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react'
-import Form from './components/form.js'
-import Filter from './components/filter.js'
-import Numbers from './components/numbers.js'
-import personsServices from './services/persons.js'
+import { useState, useEffect } from 'react';
+import Filter from './components/filter.js';
+import Numbers from './components/numbers.js';
+import personsServices from './services/persons.js';
 import Notification from './components/notification.js';
 import MasgError from './components/error.js';
+import Modal from "./components/modal.js";
+import Form from './components/form.js';
+
+import './styles.css';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -14,14 +17,15 @@ const App = () => {
   const [notificationMessage, setNotificationMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
 
   useEffect(() => {
     personsServices
       .getAll()
       .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-        setIsLoading(false)
+        console.log('promise fulfilled');
+        setPersons(response.data);
+        setIsLoading(false);
       })
       .catch(error => {
         console.log("Error fetching data:", error);
@@ -29,17 +33,7 @@ const App = () => {
         setTimeout(() => setErrorMessage(null), 3000);
         setIsLoading(false);
       });
-  }, [])
-
-  const handleNotification = (message) => {
-    setNotificationMessage(message);
-    setTimeout(() => setNotificationMessage(null), 3000);
-  };
-
-  const handleError = (message) => {
-    setErrorMessage(message);
-    setTimeout(() => setErrorMessage(null), 3000);
-  };
+  }, []);
 
   if (isLoading) {
     // Show loading spinner or message
@@ -50,39 +44,58 @@ const App = () => {
       </div>
     );
   }
-  
+
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h2>Phonebook app</h2>
       <Notification message={notificationMessage} />
       <MasgError message={errorMessage} />
-      <Filter 
-      search={search}
-      setSearch={setSearch} 
-      setNotificationMessage={handleNotification}
-      setErrorMessage={handleError}  
-      />
-      <h3>Add new</h3>
-      <Form 
-        newName={newName}
-        setNewName={setNewName}
-        newNumber={newNumber}
-        setNewNumber={setNewNumber}
-        persons={persons}
-        setPersons={setPersons}
-        setNotificationMessage={handleNotification}
-        setErrorMessage={handleError} 
-      />
-      <h3>Numbers</h3>
-      <Numbers 
-      persons={persons}
-      setPersons={setPersons}
-      search={search}
-      setNotificationMessage={handleNotification}
-      setErrorMessage={handleError}  
-      />
-    </div>
-  )
-}
+      <div className="container">
+        <div className='contacts-header'>
+          <h3 className='header-title'>Contacts</h3>
+          <button
+          className="add-contact-button"
+          onClick={() => setIsModalOpen(true)}
+        >
+          + New Contact
+        </button>
+        </div>
+        <Filter 
+          search={search}
+          setSearch={setSearch}
+          setNotificationMessage={setNotificationMessage} 
+          setErrorMessage={setErrorMessage}
+        />
+        
+        {/* Modal for the Form */}
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+          <h3>Add New Contact</h3>
+          <Form 
+            newName={newName}
+            setNewName={setNewName}
+            newNumber={newNumber}
+            setNewNumber={setNewNumber}
+            persons={persons}
+            setPersons={setPersons}
+            setNotificationMessage={setNotificationMessage} 
+            setErrorMessage={setErrorMessage}
+            setIsModalOpen={setIsModalOpen}  // Pass the setIsModalOpen function here
+          />
+        </Modal>
 
-export default App
+        <Numbers 
+          persons={persons}
+          setPersons={setPersons}
+          search={search}
+          setNotificationMessage={setNotificationMessage} 
+          setErrorMessage={setErrorMessage}
+        />
+      </div>
+      <div className="footer">
+        Made by <a href="https://www.linkedin.com/in/viktoriia-kuznetsova/">Viktoriia Kuznetsova</a>
+      </div>
+    </div>
+  );
+};
+
+export default App;

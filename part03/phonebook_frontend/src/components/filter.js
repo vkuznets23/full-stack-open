@@ -1,14 +1,17 @@
 import React from "react";
 
-const Filter = ({persons, search, setSearch }) => {
-
-return (
-    <div>
-        filter shown with <input 
+const Filter = ({ search, setSearch }) => {
+  return (
+    <div className="filter-container">
+      <input
+        className="filter-input"
+        type="text"
         value={search}
-        onChange={(e) => setSearch(e.target.value)}/>
-      </div>
-    )
-}
+        onChange={(e) => setSearch(e.target.value)}
+        placeholder="Search for contacts..."
+      />
+    </div>
+  );
+};
 
-export default Filter
+export default Filter;
