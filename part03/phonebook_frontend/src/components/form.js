@@ -1,11 +1,17 @@
+import React from "react";
 import personsServices from '../services/persons.js';
 
 const Form = ({
-  newName, setNewName, newNumber, setNewNumber,
-  persons, setPersons, setNotificationMessage, setErrorMessage
+  newName,
+  setNewName,
+  newNumber,
+  setNewNumber,
+  persons,
+  setPersons,
+  setNotificationMessage,
+  setErrorMessage,
+  setIsModalOpen,
 }) => {
-  
-  // Function to validate phone number format: XX-XXXXXXX or XXX-XXXXXXXX
   const validatePhoneNumber = (phoneNumber) => {
     const phoneNumberRegex = /^(\d{2,3}-\d{6,8})$/;
     return phoneNumberRegex.test(phoneNumber);
@@ -13,13 +19,6 @@ const Form = ({
 
   const addPerson = (event) => {
     event.preventDefault();
-
-    const newPerson = {
-      name: newName.trim(),
-      number: newNumber.trim(),
-    };
-
-    // Validate fields
     if (!newName || !newNumber) {
       alert("Both name and phone number must be provided.");
       return;
@@ -30,12 +29,19 @@ const Form = ({
       setTimeout(() => setErrorMessage(null), 3000);
       return;
     }
-    
+
     if (!validatePhoneNumber(newNumber)) {
-      setErrorMessage("Phone number must be in the format XX-XXXXXXX or XXX-XXXXXXXX.");
+      setErrorMessage(
+        "Phone number must be in the format XX-XXXXXXX or XXX-XXXXXXXX."
+      );
       setTimeout(() => setErrorMessage(null), 3000);
       return;
     }
+
+    const newPerson = {
+      name: newName.trim(),
+      number: newNumber.trim(),
+    };
 
     // Check if the contact already exists
     const exist = persons.find(person => person.name === newPerson.name);
@@ -49,6 +55,7 @@ const Form = ({
           setNewNumber('');
           setNotificationMessage(`${newPerson.name} ${newPerson.number} was added to the list`);
           setTimeout(() => setNotificationMessage(null), 3000);
+          setIsModalOpen(false);
         })
         .catch(error => {
           console.error("Error adding person", error);
@@ -58,6 +65,7 @@ const Form = ({
             setErrorMessage("Failed to add the contact. Please try again.");
           }
           setTimeout(() => setErrorMessage(null), 5000);
+          setIsModalOpen(false);
         });
     } else {
       // Ask the user if they want to update the contact
@@ -80,11 +88,13 @@ const Form = ({
             setNewNumber('');
             setNotificationMessage(`${newPerson.name}'s number was updated`);
             setTimeout(() => setNotificationMessage(null), 3000);
+            setIsModalOpen(false);
           })
           .catch(error => {
             console.error("Error updating person", error);
             setErrorMessage(`The contact ${exist.name} was already deleted from the server.`);
             setTimeout(() => setErrorMessage(null), 3000);
+            setIsModalOpen(false);
             setPersons(persons.filter(person => person._id !== exist._id));
           });
       }
@@ -92,27 +102,29 @@ const Form = ({
   };
 
   return (
-    <form onSubmit={addPerson}>
-      <div>
+    <div className="form-container">
+      <form onSubmit={addPerson}>
         <div>
-          name: <input 
+          <label htmlFor="name">Name:</label>
+          <input
+            id="name"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="Pekka Salmonen"
           />
         </div>
         <div>
-          phone: <input 
+          <label htmlFor="phone">Phone:</label>
+          <input
+            id="phone"
             value={newNumber}
             onChange={(e) => setNewNumber(e.target.value)}
             placeholder="358-401234"
           />
         </div>
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
+        <button type="submit">Add Contact</button>
+      </form>
+    </div>
   );
 };
 

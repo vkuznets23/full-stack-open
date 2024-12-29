@@ -1,50 +1,60 @@
 import React from "react";
 import personsService from "../services/persons";
 
+const Numbers = ({ persons, setPersons, search, setNotificationMessage }) => {
+  // Filter persons based on search
+  const filterPersons = persons
+    .filter(person => {
+      const nameMatches = person.name
+        ? person.name.toLowerCase().includes(search.toLowerCase())
+        : false;
+      const numberMatches = person.number
+        ? person.number.includes(search)
+        : false;
+      return nameMatches || numberMatches;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
-const Numbers = ( {persons, setPersons, search, setNotificationMessage } ) => {
+  // Handle delete
+  const handleDelete = (id, name) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete ${name}'s number?`);
 
-    const filterPersons = persons
-      .filter(person => {
-        // Ensure both name and number are strings before checking includes
-        const nameMatches = person.name ? person.name.toLowerCase().includes(search.toLowerCase()) : false;
-        const numberMatches = person.number ? person.number.includes(search) : false;
-        return nameMatches || numberMatches;
-      })
-      .sort((a, b) => a.name.localeCompare(b.name));
-    
-    const handleDelete = (id, name) => {
-        // Ask the user to confirm the delete action
-        const confirmDelete = window.confirm(`Are you sure you want to delete ${name}'s number?`);
-        
-        if(confirmDelete) {
-        personsService
-          .deletePerson(id)
-          .then(() => {
-            setNotificationMessage(`${name}'s number was deleted`)
-            setPersons(persons.filter(person => person._id !== id));
-            setTimeout(() => {
-              setNotificationMessage(null)
-            }, 3000)
-          })
-          .catch (error => {
-            console.log("Error deliting person", error);
-          })
-        }
+    if (confirmDelete) {
+      personsService
+        .deletePerson(id)
+        .then(() => {
+          setNotificationMessage(`${name}'s number was deleted`);
+          setPersons(persons.filter(person => person._id !== id)); // Update the state
+          setTimeout(() => {
+            setNotificationMessage(null);
+          }, 3000);
+        })
+        .catch((error) => {
+          console.log("Error deleting person", error);
+        });
     }
+  };
 
-    return (
-      <div>
-      {filterPersons.map((person) => (
-      person._id ? (
-      <div key={person._id}>
-        {person.name} {person.number}
-        <button onClick={() => handleDelete(person._id, person.name)}>delete</button>
-      </div>
-    ) : null // skip rendering if _id is not available
-    ))}
+  return (
+    <div className="container">
+      {filterPersons.map((person) =>
+        person._id ? (
+          <div className="contact-card" key={person._id}>
+            <div>
+              <div className="contact-name">{person.name}</div>
+              <div className="contact-number">{person.number}</div>
+            </div>
+            <button
+              className="delete-button"
+              onClick={() => handleDelete(person._id, person.name)}
+            >
+              Delete
+            </button>
+          </div>
+        ) : null // Skip rendering if _id is not available
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Numbers
+export default Numbers;
