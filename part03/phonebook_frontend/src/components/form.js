@@ -1,5 +1,4 @@
 import personsServices from '../services/persons.js';
-import { debounce } from 'lodash';
 
 const Form = ({
   newName, setNewName, newNumber, setNewNumber,
@@ -12,14 +11,7 @@ const Form = ({
     return phoneNumberRegex.test(phoneNumber);
   };
 
-  // Show message function for notification or error
-  const showMessage = (setMessage, message, timeout = 3000) => {
-    setMessage(message);
-    setTimeout(() => setMessage(null), timeout);
-  };
-
-  // Optimized submit handler using async/await with debounce
-  const addPerson = debounce(async (event) => {
+  const addPerson = (event) => {
     event.preventDefault();
 
     const newPerson = {
@@ -29,17 +21,19 @@ const Form = ({
 
     // Validate fields
     if (!newName || !newNumber) {
-      showMessage(setErrorMessage, "Both name and phone number must be provided.");
+      alert("Both name and phone number must be provided.");
       return;
     }
 
     if (newName.length < 3) {
-      showMessage(setErrorMessage, "Name must be at least 3 characters long.");
+      setErrorMessage("Name must be at least 3 characters long.");
+      setTimeout(() => setErrorMessage(null), 3000);
       return;
     }
-
+    
     if (!validatePhoneNumber(newNumber)) {
-      showMessage(setErrorMessage, "Phone number must be in the format XX-XXXXXXX or XXX-XXXXXXXX.");
+      setErrorMessage("Phone number must be in the format XX-XXXXXXX or XXX-XXXXXXXX.");
+      setTimeout(() => setErrorMessage(null), 3000);
       return;
     }
 
@@ -47,48 +41,55 @@ const Form = ({
     const exist = persons.find(person => person.name === newPerson.name);
     if (!exist) {
       // Create a new person
-      try {
-        const response = await personsServices.create(newPerson);
-
-        // Optimize by batching state updates
-        setPersons(prevPersons => [...prevPersons, response.data]); // Efficient state update
-        setNewName('');
-        setNewNumber('');
-        showMessage(setNotificationMessage, `${newPerson.name} ${newPerson.number} was added to the list`);
-      } catch (error) {
-        console.error("Error adding person", error);
-        const errorMsg = error.response?.data?.error || "Failed to add the contact. Please try again.";
-        showMessage(setErrorMessage, errorMsg, 5000);
-      }
+      personsServices
+        .create(newPerson)
+        .then(response => {
+          setPersons(persons.concat(response.data)); // Add the new person to the list
+          setNewName(''); // Clear input fields
+          setNewNumber('');
+          setNotificationMessage(`${newPerson.name} ${newPerson.number} was added to the list`);
+          setTimeout(() => setNotificationMessage(null), 3000);
+        })
+        .catch(error => {
+          console.error("Error adding person", error);
+          if (error.response && error.response.data.error) {
+            setErrorMessage(error.response.data.error);
+          } else {
+            setErrorMessage("Failed to add the contact. Please try again.");
+          }
+          setTimeout(() => setErrorMessage(null), 5000);
+        });
     } else {
       // Ask the user if they want to update the contact
       const confirmDelete = window.confirm(`Are you sure you want to update ${exist.name}'s number?`);
 
       if (confirmDelete) {
         const updatedPerson = {
-          ...exist,
+          ...exist, 
           number: newNumber.trim(),
         };
 
         // Update the existing person
-        try {
-          const response = await personsServices.update(exist._id, updatedPerson);
-
-          // Optimize by batching state updates
-          setPersons(prevPersons =>
-            prevPersons.map(person => person._id === exist._id ? response.data : person)
-          );
-          setNewName('');
-          setNewNumber('');
-          showMessage(setNotificationMessage, `${newPerson.name}'s number was updated`);
-        } catch (error) {
-          console.error("Error updating person", error);
-          showMessage(setErrorMessage, `The contact ${exist.name} was already deleted from the server.`, 5000);
-          setPersons(prevPersons => prevPersons.filter(person => person._id !== exist._id));
-        }
+        personsServices
+          .update(exist._id, updatedPerson)
+          .then(response => {
+            setPersons(persons.map(person =>
+              person._id === exist._id ? response.data : person
+            ));
+            setNewName('');
+            setNewNumber('');
+            setNotificationMessage(`${newPerson.name}'s number was updated`);
+            setTimeout(() => setNotificationMessage(null), 3000);
+          })
+          .catch(error => {
+            console.error("Error updating person", error);
+            setErrorMessage(`The contact ${exist.name} was already deleted from the server.`);
+            setTimeout(() => setErrorMessage(null), 3000);
+            setPersons(persons.filter(person => person._id !== exist._id));
+          });
       }
     }
-  }, 500); // Debounce the handler by 500ms
+  };
 
   return (
     <form onSubmit={addPerson}>

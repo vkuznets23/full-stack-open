@@ -23,7 +23,7 @@ if (!password) {
 
 const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority&connectTimeoutMS=10000&socketTimeoutMS=45000&maxPoolSize=50`;
 mongoose.set('strictQuery', false);
-mongoose.connect(dbUri, {maxPoolSize: 10})
+mongoose.connect(dbUri)
   .then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('Failed to connect to MongoDB:', err));
 
@@ -127,6 +127,8 @@ app.delete('/api/persons/:id', async (req, res, next) => {
 
 // POST to add a new person
 app.post('/api/persons', async (req, res, next) => {
+  console.log(req.body);
+
   const { name, number } = req.body;
 
   // Validate data
