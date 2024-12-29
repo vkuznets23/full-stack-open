@@ -21,7 +21,7 @@ if (!password) {
   process.exit(1);
 }
 
-const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority&connectTimeoutMS=10000&socketTimeoutMS=45000&maxPoolSize=50`;
+const dbUri = `mongodb+srv://vkuznets:${password}@phonebook.3wnu5.mongodb.net/phonebook?retryWrites=true&w=majority&connectTimeoutMS=5000&socketTimeoutMS=15000&maxPoolSize=100`;
 mongoose.set('strictQuery', false);
 mongoose.connect(dbUri)
   .then(() => console.log('Connected to MongoDB'))
@@ -46,19 +46,26 @@ const contactSchema = new mongoose.Schema({
     },
   },
 });
+
 contactSchema.index({ name: 1 });
+contactSchema.index({ number: 1 }); 
 
 const Contact = mongoose.model('Contact', contactSchema);
 
 //GET all persons
 app.get('/api/persons', async (req, res, next) => {
+  const { page = 1, limit = 10 } = req.query; // Пагинация
   try {
-      const contacts = await Contact.find({}).sort({ name: 1 });
-      res.json(contacts);
+    const contacts = await Contact.find({})
+      .sort({ name: 1 })
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit)); // Ограничиваем количество результатов
+    res.json(contacts);
   } catch (error) {
-      next(error);
+    next(error);
   }
 });
+
 
 //GET person by id
 app.get('/api/persons/:id', async (req, res, next) => {
