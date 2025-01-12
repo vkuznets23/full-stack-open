@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import Filter from './components/filter.js';
 import Numbers from './components/numbers.js';
-import personsServices from './services/persons.js';
+import personsServices from './services/personsService.js';
 import Notification from './components/notification.js';
 import MasgError from './components/error.js';
 import Modal from "./components/modal.js";
 import Form from './components/form.js';
 
-import './styles.css';
-import './loader.css';
+import './styles/styles.css';
+import './styles/loader.css';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
