@@ -1,5 +1,5 @@
 import React from "react";
-import personsService from "../services/persons";
+import personsService from "../services/personsService";
 
 const Numbers = ({ persons, setPersons, search, setNotificationMessage }) => {
   // Filter persons based on search

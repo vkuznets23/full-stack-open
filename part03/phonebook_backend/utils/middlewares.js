@@ -1,3 +1,7 @@
+const express = require('express');
+
+// JSON parser middleware
+const jsonParser = express.json();
 
 const errorHandler = (err, req, res, next) => {
     console.error(err.message);
@@ -30,4 +34,7 @@ const errorHandler = (err, req, res, next) => {
     if (next) next(); // To satisfy ESLint
 };
 
-module.exports = errorHandler;
+module.exports = {
+    jsonParser,
+    errorHandler,
+};
