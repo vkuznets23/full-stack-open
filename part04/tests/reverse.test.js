@@ -79,3 +79,54 @@ describe('calculate which blog has most likes', () => {
         
     });
 });
+
+describe('author with max blogs', () => {
+    test('no blogs', () => {
+        const blogs = [];
+        const result = listHelper.mostBlogs(blogs);
+        const expected = null;
+        assert.strictEqual(result, expected);
+    });
+
+    test('multiple blogs', () => {
+        const blogs = [
+            {
+                title: 'First Blog',
+                author: 'John Doe',
+                url: 'http://example.com/blog1',
+                likes: 7,
+            },
+            {
+                title: 'Second Blog',
+                author: 'John Doe',
+                url: 'http://example.com/blog1',
+                likes: 17,
+            },
+            {
+                title: 'Third Blog',
+                author: 'John Doe',
+                url: 'http://example.com/blog1',
+                likes: 27,
+            },
+            {
+                title: 'New Blog',
+                author: 'Blabla Doe',
+                url: 'http://example.com/blog1',
+                likes: 5,
+            },
+            {
+                title: 'Newnew blog',
+                author: 'Tolstoy',
+                url: 'http://example.com/blog1',
+                likes: 1,
+            }
+        ];
+
+        const result = listHelper.mostBlogs(blogs);
+        const expected = {
+                author: "John Doe",
+                blogs: 3,
+        }
+        assert.deepStrictEqual(result, expected);
+    })
+});
