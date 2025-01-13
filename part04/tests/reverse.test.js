@@ -130,3 +130,22 @@ describe('author with max blogs', () => {
         assert.deepStrictEqual(result, expected);
     })
 });
+
+describe('most likes', () => {
+    test('multiple autors', () => {
+        const blogs = [
+            { author: 'Author A', likes: 10 },
+            { author: 'Author B', likes: 5 },
+            { author: 'Author A', likes: 7 },
+            { author: 'Author C', likes: 12 },
+            { author: 'Author B', likes: 3 }
+          ];
+        const result = listHelper.mostLikes(blogs);
+        const expected = {
+            author: 'Author A',
+            likes: 17,
+        }
+        assert.deepStrictEqual(result, expected);
+    })
+
+})
