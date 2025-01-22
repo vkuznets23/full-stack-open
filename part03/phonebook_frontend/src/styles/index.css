@@ -27,7 +27,7 @@ code {
   display: block; /* Show when there's a message */
 }
 
-.error {
+/*.error {
   display: none;
   color: red;
   background: lightgrey;
@@ -39,5 +39,6 @@ code {
 }
 
 .error.show {
-  display: block; /* Show when there's a message */
-}
+  display: block;
+} 
+*/

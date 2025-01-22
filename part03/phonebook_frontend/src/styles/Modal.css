@@ -25,13 +25,23 @@
   
   /* Кнопка закрытия */
   .modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
+    padding: 10px;
+    margin-left: 10px;
+    background-color: #626467;
+    color: white;
     border: none;
-    font-size: 24px;
-    font-weight: bold;
+    border-radius: 4px;
     cursor: pointer;
-    color: #333;
-  }  
+    font-size: 1rem;
+  }
+  .modal-close:hover {
+    background-color: #7c7d80;
+
+  }
+
+  /* Error message styling */
+.error-message {
+  color: red;
+  margin-top: 10px; /* Adds space between the form and error */
+  font-size: 14px;
+}
