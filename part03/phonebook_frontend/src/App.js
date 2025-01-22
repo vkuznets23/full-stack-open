@@ -50,6 +50,11 @@ const App = () => {
     );
   }
 
+  // Function to close the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div>
       <h2>Phonebook app</h2>
@@ -73,7 +78,7 @@ const App = () => {
         />
         
         {/* Modal for the Form */}
-        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Modal isOpen={isModalOpen} onClose={closeModal}>
           <h3>Add New Contact</h3>
           <Form 
             newName={newName}
@@ -84,7 +89,7 @@ const App = () => {
             setPersons={setPersons}
             setNotificationMessage={setNotificationMessage} 
             setErrorMessage={setErrorMessage}
-            setIsModalOpen={setIsModalOpen}  // Pass the setIsModalOpen function here
+            closeModal={closeModal}
           />
         </Modal>
 
