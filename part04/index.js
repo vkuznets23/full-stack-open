@@ -23,8 +23,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/login', loginRouter);
 
 const PORT = 3003
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
 
-module.exports = app;
+module.exports = { app, server };
