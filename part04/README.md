@@ -83,7 +83,7 @@ Make a POST request to /api/blogs with the following headers and body:
 Authorization: Bearer your_jwt_token
 ```
 #### Body:
-```
+```json
 {
   "title": "New Blog Title",
   "author": "Author Name",
