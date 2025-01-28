@@ -4,7 +4,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const connectDB = require('./config/configDB')
-const blogRoutes = require('./routes/blogRoutes');
+const blogRoutes = require('./controllers/blogRoutes');
+const userRoutes = require('./controllers/userRoutes');
+const loginRouter = require('./controllers/loginRoutes');
 
 const app = express()
 
@@ -17,6 +19,8 @@ app.use(express.json())
 
 // Routes
 app.use('/api/blogs', blogRoutes)
+app.use('/api/users', userRoutes);
+app.use('/api/login', loginRouter);
 
 const PORT = 3003
 app.listen(PORT, () => {
