@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/usersSchema')
+const authenticateToken = require('../middleware/auth');
 
 
 usersRouter.get('/', async (req, res) => {
@@ -45,5 +46,22 @@ usersRouter.post('/', async (request, response) => {
 
   response.status(201).json(savedUser)
 })
+
+usersRouter.delete('/:id', authenticateToken, async (req, res) => {
+  try {
+    // Only allow deleting if the logged-in user is the same as the one making the request
+    if (req.user.id.toString() !== req.params.id) {
+      return res.status(403).json({ error: 'You can only delete your own account' });
+    }
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(204).end(); // Successfully deleted, no content to return
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete user' });
+  }
+});
 
 module.exports = usersRouter

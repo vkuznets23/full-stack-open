@@ -110,16 +110,21 @@ describe('Blog API tests', () => {
     
         expect(ids.length).toBe(uniqueIds.size); // Ensure no duplicate _id values
     });
+    
     test('HTTP POST to /api/blogs successfully creates a new blog', async () => {
-        // Step 1: Create a new user and log in to obtain a token
         const newUser = {
-          username: 'test_user',
-          name: 'Test User',
+          username: 'test_user3',
+          name: 'Test user2',
           password: 'password123',
         };
       
         // Create a user
-        await api.post('/api/users').send(newUser).expect(201);
+        const userResponse = await api
+          .post('/api/users')
+          .send(newUser)
+          .expect(201);
+        console.log('User created:', userResponse.body); // Check the response
+        
       
         // Log in to get the token
         const loginResponse = await api
@@ -129,12 +134,14 @@ describe('Blog API tests', () => {
             password: newUser.password,
           })
           .expect(200);
+        console.log('Login response:', loginResponse.body); // Check the login response
       
         const token = loginResponse.body.token;
       
         // Step 2: Get the initial count of blogs
         const initialBlogs = await api.get('/api/blogs').expect(200);
         const initialBlogCount = initialBlogs.body.length;
+        console.log('Initial Blog Count:', initialBlogCount);
       
         // Step 3: Define a new blog to be created
         const newBlog = {
@@ -147,10 +154,12 @@ describe('Blog API tests', () => {
         // Step 4: Create the new blog with a POST request, including the token
         const response = await api
           .post('/api/blogs')
-          .set('Authorization', `Bearer ${token}`) // Add the token to the Authorization header
+          .set('Authorization', `Bearer ${token}`)
           .send(newBlog)
-          .expect(201) // Expect HTTP 201 Created
+          .expect(201)
           .expect('Content-Type', /application\/json/);
+        console.log('Created Blog:', response.body); // Check the created blog
+        
       
         // Step 5: Verify that the blog content matches what was sent
         const createdBlog = response.body;
@@ -163,20 +172,22 @@ describe('Blog API tests', () => {
         // Step 6: Verify that the total number of blogs increased by one
         const updatedBlogs = await api.get('/api/blogs').expect(200);
         expect(updatedBlogs.body.length).toBe(initialBlogCount + 1);
-      
+        
         // Cleanup: Delete the created blog
         await api
           .delete(`/api/blogs/${createdBlog._id}`)
-          .set('Authorization', `Bearer ${token}`) // Include token for deletion
+          .set('Authorization', `Bearer ${token}`)
+          .expect(204);
+        
+        await api
+          .delete(`/api/users/${userResponse.body.id}`)
+          .set('Authorization', `Bearer ${token}`)
           .expect(204);
       });
-      
   });
 
 afterAll(async () => {
-    console.log('Closing MongoDB connection...');
     await mongoose.connection.close(); // Closes the database connection
-    console.log('Connection closed.');
     server.close();
 });
   
