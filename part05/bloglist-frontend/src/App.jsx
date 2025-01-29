@@ -33,6 +33,16 @@ const App = () => {
     });
   }, []);
   
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this blog?")) {
+      try {
+        await blogService.deleteBlog(id); // Call the deleteBlog function
+        setBlogs(blogs.filter(blog => blog.id !== id)); // Remove the deleted blog from state
+      } catch (error) {
+        console.error('Error deleting blog:', error);
+      }
+    }
+  };
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser');
@@ -109,7 +119,7 @@ const App = () => {
             {blogs.length === 0 ? (
               <p>No blogs available.</p>
             ) : (
-              blogs.map((blog) => <Blog key={blog.id || blog._id} blog={blog} />)
+              blogs.map((blog) => <Blog key={blog.id || blog._id} blog={blog} handleDelete={handleDelete}/>)
             )}
           </div>
         </div>
