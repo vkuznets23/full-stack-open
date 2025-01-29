@@ -10,6 +10,7 @@ const App = () => {
   const [password, setPassword] = useState('')
 
   const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
 
   const [newBlog, setNewBlog] = useState({
@@ -99,7 +100,7 @@ const App = () => {
   
   const handleBlogSubmit = async (event) => {
     event.preventDefault()
-    
+
     if (!newBlog.title || !newBlog.author || !newBlog.url) {
       setErrorMessage('All fields are required')
       setTimeout(() => setErrorMessage(null), 5000)
@@ -109,6 +110,10 @@ const App = () => {
     try {
       const createdBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(createdBlog)) // Добавить новый блог в текущий список
+      setNotification(`blog ${newBlog.title} successfuly added`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
       setNewBlog({ title: '', author: '', url: '' }) // Очистить форму
     } catch (error) {
       setErrorMessage('Failed to create blog')
@@ -155,6 +160,7 @@ const App = () => {
     <div>
       {/* Display the error message if login fails */}
       {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+      {notification && <div style={{ color: 'green' }}>{notification}</div>}
   
       {/* If the user is logged in, show blogs and user info */}
       {user === null ? (
