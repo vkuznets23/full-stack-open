@@ -25,4 +25,29 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, update, create, setToken }
+const updateBlogLikes = async (blog) => {
+  if (!blog.id || !blog.user?.id) {
+    console.error("Error: Blog ID or User ID is undefined");
+    return;
+  }
+
+  const config = {
+    headers: { Authorization: token }, // Include token
+  };
+
+  // Make sure you're sending the full blog data to the backend
+  const updatedBlog = {
+    user: blog.user.id || blog.user, // Send user ID, not the object
+    title: blog.title,
+    author: blog.author,
+    url: blog.url,
+    likes: blog.likes + 1, // Increment likes
+  };
+
+  // Correctly use blog.id instead of _id
+  const response = await axios.put(`${baseUrl}/${blog.id}`, updatedBlog, config); // Use blog.id
+  return response.data;
+};
+
+
+export default { getAll, update, create, setToken, updateBlogLikes }

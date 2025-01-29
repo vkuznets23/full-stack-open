@@ -14,9 +14,25 @@ const App = () => {
   const [notification, setNotification] = useState(null);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+  /*useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
+  }, []);*/
+
+  useEffect(() => {
+    blogService.getAll().then((initialBlogs) => {
+      // Map _id to id for each blog
+      const formattedBlogs = initialBlogs
+      .map(blog => ({
+        ...blog,
+        id: blog._id, // Convert _id to id
+      }))
+      .sort((a, b) => b.likes - a.likes);
+  
+      console.log("Formatted blogs:", formattedBlogs); // Check if blogs have id now
+      setBlogs(formattedBlogs);
+    });
   }, []);
+  
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser');
