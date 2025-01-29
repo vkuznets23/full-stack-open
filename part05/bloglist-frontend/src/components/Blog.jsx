@@ -2,7 +2,7 @@ import Togglable from './Togglable';
 import { useState } from 'react';
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleDelete }) => {
   const [likes, setLikes] = useState(blog.likes);
 
   const handleLike = async () => {
@@ -39,6 +39,7 @@ const Blog = ({ blog }) => {
           <p>
             Likes: {likes} <button onClick={handleLike}>Like</button>
           </p>
+          <button onClick={() => handleDelete(blog.id)}>Delete</button>
         </Togglable>
       </div>
     </div>
