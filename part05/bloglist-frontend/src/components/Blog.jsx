@@ -37,7 +37,8 @@ const Blog = ({ blog, handleDelete }) => {
           <p>by {blog.author}</p>
           <p>URL: {blog.url}</p>
           <p>
-            Likes: {likes} <button onClick={handleLike}>Like</button>
+            Likes: {likes} 
+            <button onClick={handleLike}>Like</button>
           </p>
           <button onClick={() => handleDelete(blog.id)}>Delete</button>
         </Togglable>
