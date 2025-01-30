@@ -79,7 +79,7 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       const createdBlog = await blogService.create(blogObject);
-      setBlogs(await blogService.getAll()); // Fetch updated list
+      setBlogs((prevBlogs) => [...prevBlogs, createdBlog]);
       setNotification(`Blog '${blogObject.title}' successfully added`);
       setTimeout(() => setNotification(null), 5000);
     } catch (error) {
