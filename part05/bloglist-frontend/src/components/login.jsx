@@ -22,7 +22,7 @@ const Login = (props) => {
             type="password"
             id="password"
             value={props.password}
-            name="Password"
+            password="Password"
             onChange={({ target }) => props.setPassword(target.value)}
             autoComplete="current-password"
           />

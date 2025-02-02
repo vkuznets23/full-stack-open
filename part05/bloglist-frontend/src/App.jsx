@@ -90,7 +90,6 @@ const App = () => {
 
   return (
     <div>
-      {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
       {notification && <div style={{ color: 'green' }}>{notification}</div>}
 
       {user === null ? (
