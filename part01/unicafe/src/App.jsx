@@ -6,6 +6,7 @@ function App() {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
+  const [all, setAll] = useState(0)
 
   return (
     <>
@@ -13,11 +14,13 @@ function App() {
         setGood={setGood}
         setNeutral={setNeutral}
         setBad={setBad}
+        setAll={setAll}
         good={good}
         bad={bad}
         neutral={neutral}
+        all={all}
       />
-      <Statistic good={good} neutral={neutral} bad={bad} />
+      <Statistic good={good} neutral={neutral} bad={bad} all={all} />
     </>
   )
 }
