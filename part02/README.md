@@ -60,3 +60,49 @@ const App = ({ notes }) => {
 ```
 
 read more [here](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key)
+
+## `event` parameter
+
+`event.preventDefault()` method, which prevents the default action (the default action would, among other things, cause the page to reload.)
+
+If you want to define your event handler inline, wrap it in an anonymous function like so (otherwise this won’t fire on click—it fires every time the component renders):
+`<button onClick={() => alert('...')}>`
+
+## Event propagation
+
+If you click on either button, its onClick will run first, followed by the parent `<div>` onClick. So two messages will appear. If you click the toolbar itself, only the parent `<div>` onClick will run.
+
+```js
+export default function Toolbar() {
+  return (
+    <div
+      className="Toolbar"
+      onClick={() => {
+        alert("You clicked on the toolbar!");
+      }}
+    >
+      <button onClick={() => alert("Playing!")}>Play Movie</button>
+      <button onClick={() => alert("Uploading!")}>Upload Image</button>
+    </div>
+  );
+}
+```
+
+To prevent this u need to **stop propagation**
+
+```js
+function Button({ onClick, children }) {
+  return (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+```
+
+Read more [here](https://react.dev/learn/responding-to-events)
