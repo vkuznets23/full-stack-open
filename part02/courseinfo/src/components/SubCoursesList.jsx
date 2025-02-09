@@ -1,6 +1,6 @@
 import Course from './Course'
 
-const CoursesList = ({ parts }) => {
+const SubCoursesList = ({ parts }) => {
   return (
     <div>
       {parts.map((course) => {
@@ -16,4 +16,4 @@ const CoursesList = ({ parts }) => {
   )
 }
 
-export default CoursesList
+export default SubCoursesList
