@@ -9,6 +9,21 @@
 
 ### Countries API (2.18 — 2.20)
 
+### How to run
+
+Download repo, go to the part01 folder, install dependencies and run. It's running on http://localhost:5173/
+
+```bash
+git clone https://github.com/vkuznets23/full-stack-open.git
+cd full-stack-open
+cd part02
+```
+
+```bash
+npm install
+npm run dev
+```
+
 # Some notes from the theoretic part
 
 ## Debugging
