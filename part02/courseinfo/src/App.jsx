@@ -1,16 +1,8 @@
-import { course } from './data'
-import Header from './components/Header'
-import CoursesList from './components/CoursesList'
-import Total from './components/Total'
+import Courses from './components/Courses'
+import { courses } from './data'
 
 const App = () => {
-  return (
-    <div>
-      <Header name={course.name} />
-      <CoursesList parts={course.parts} />
-      <Total parts={course.parts} />
-    </div>
-  )
+  return <Courses courses={courses} />
 }
 
 export default App
