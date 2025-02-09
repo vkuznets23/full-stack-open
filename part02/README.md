@@ -1,3 +1,16 @@
+# Exercises 2.1 - 2.5
+
+### Course information (2.1 – 1.5)
+
+1. Split code in components
+2. Render collections and modules using `.map` method
+
+### Phone book (2.6 — 2.17)
+
+### Countries API (2.18 — 2.20)
+
+# Some notes from the theoretic part
+
 ## Debugging
 
 Rule#1 — have 10-100 `console.logs` if something doesn't work
