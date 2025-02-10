@@ -5,7 +5,12 @@ const Numbers = ({ persons }) => {
     <>
       <Header title="Numbers" />
       {persons.map((person) => {
-        return <p key={person.id}>{person.name}</p>
+        return (
+          <p key={person.id}>
+            <b>{person.name} </b>
+            {person.phone}
+          </p>
+        )
       })}
     </>
   )

@@ -1,7 +1,14 @@
 import Header from './Header'
 import Form from './Form'
 
-const Phonebook = ({ name, setName, persons, setPersons }) => {
+const Phonebook = ({
+  name,
+  setName,
+  persons,
+  setPersons,
+  number,
+  setNumber,
+}) => {
   return (
     <div>
       <Header title="Phonebook" />
@@ -10,6 +17,8 @@ const Phonebook = ({ name, setName, persons, setPersons }) => {
         setName={setName}
         persons={persons}
         setPersons={setPersons}
+        number={number}
+        setNumber={setNumber}
       />
     </div>
   )
