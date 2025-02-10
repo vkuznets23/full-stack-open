@@ -11,6 +11,8 @@
 2. Render the list of contacts dynamically using `.map()` and add event handler to add new contacts
 3. Implement **check for duplicate names** when adding contacts and a **search bar** to filter contacts by name.
 
+- I also added db generator using **faker API**
+
 ### Countries API (2.18 — 2.20)
 
 ### How to run
