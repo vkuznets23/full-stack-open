@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { contacts } from './data'
+import { contacts } from './db/contacts'
 import AddContact from './components/AddContact'
 import ContactList from './components/ContactList'
 import Filter from './components/Filter'
 
+console.log(contacts)
 function App() {
   const [persons, setPersons] = useState(contacts)
   const [name, setName] = useState('')
