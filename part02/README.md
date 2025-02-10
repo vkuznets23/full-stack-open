@@ -7,6 +7,10 @@
 
 ### Phone book (2.6 — 2.17)
 
+1. Create the phone book data structure and add functionality to add contacts with name and phone number using `useState`
+2. Render the list of contacts dynamically using `.map()` and add event handler to add new contacts
+3. Implement **check for duplicate names** when adding contacts and a **search bar** to filter contacts by name.
+
 ### Countries API (2.18 — 2.20)
 
 ### How to run
@@ -34,32 +38,8 @@ Rule#1 — have 10-100 `console.logs` if something doesn't work
 console.log("props value is", props);
 ```
 
-read more [here](https://developer.chrome.com/docs/devtools/javascript)
-
-## `.map` method and keys
-
-Since u need to add a key u might use index from the map (not recommended) or BETTER id
-
-```js
-const Note = ({ note }) => {
-  return <li>{note.content}</li>;
-};
-
-const App = ({ notes }) => {
-  return (
-    <div>
-      <h1>Notes</h1>
-      <ul>
-        {notes.map((note) => (
-          <Note key={note.id} note={note} />
-        ))}
-      </ul>
-    </div>
-  );
-};
-```
-
-read more [here](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key)
+read more about debugging [here](https://developer.chrome.com/docs/devtools/javascript)
+read more about `.map` method [here](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key)
 
 ## `event` parameter
 
@@ -109,33 +89,112 @@ Read more [here](https://react.dev/learn/responding-to-events)
 
 ## How to create a form
 
-1. create `useState` for the form input
+1. create state for each input
 
 ```js
-const [newNote, setNewNote] = useState("a new note...");
+const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
 ```
 
-2. make a `handleNoteChange` and `addNote` functions
+2. event handler for each input
 
 ```js
-const addNote = (event) => {
-  event.preventDefault();
-  const noteObject = {
-    content: newNote,
-    important: Math.random() < 0.5,
-    id: String(notes.length + 1),
-  };
+const handleNameChange = (event) => {
+  setName(event.target.value);
+};
 
-  setNotes(notes.concat(noteObject));
-  setNewNote("");
+const handleEmailChange = (event) => {
+  setEmail(event.target.value);
+};
+
+const handlePasswordChange = (event) => {
+  setPassword(event.target.value);
 };
 ```
 
-3. add JSX
+3. event handler for submission
 
 ```js
-<form onSubmit={addNote}>
-  <input value={newNote} onChange={handleNoteChange} />
-  <button type="submit">save</button>
+const handleSubmit = (event) => {
+  event.preventDefault();
+  // <...>
+
+  //reset states
+  setName("");
+  setEmail("");
+  setPassword("");
+};
+```
+
+4. how JSX suppose to look like
+
+```js
+<form onSubmit={handleSubmit}>
+  <input
+    type="text"
+    id="name"
+    value={name}
+    onChange={handleNameChange}
+    placeholder="name"
+  />
 </form>
+```
+
+OR we can use one useState for all inputs
+
+```js
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  password: "",
+});
+```
+
+```js
+const handleChange = (event) => {
+  const { name, value } = event.target;
+  setFormData((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+};
+```
+
+```js
+const handleSubmit = (event) => {
+  event.preventDefault();
+
+  if (!formData.name || !formData.email || !formData.password) {
+    setError("Все поля должны быть заполнены");
+    return;
+  }
+
+  setError("");
+  console.log(formData);
+  setFormData({ name: "", email: "", password: "" });
+};
+```
+
+each element looks like this in JSX:
+
+```js
+<div>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    value={formData.name}
+    onChange={handleChange}
+    placeholder="name"
+  />
+  <input
+    type="email"
+    id="email"
+    name="email"
+    value={formData.email}
+    onChange={handleChange}
+    placeholder="email"
+  />
+</div>
 ```
