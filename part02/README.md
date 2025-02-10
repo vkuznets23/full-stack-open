@@ -106,3 +106,36 @@ function Button({ onClick, children }) {
 ```
 
 Read more [here](https://react.dev/learn/responding-to-events)
+
+## How to create a form
+
+1. create `useState` for the form input
+
+```js
+const [newNote, setNewNote] = useState("a new note...");
+```
+
+2. make a `handleNoteChange` and `addNote` functions
+
+```js
+const addNote = (event) => {
+  event.preventDefault();
+  const noteObject = {
+    content: newNote,
+    important: Math.random() < 0.5,
+    id: String(notes.length + 1),
+  };
+
+  setNotes(notes.concat(noteObject));
+  setNewNote("");
+};
+```
+
+3. add JSX
+
+```js
+<form onSubmit={addNote}>
+  <input value={newNote} onChange={handleNoteChange} />
+  <button type="submit">save</button>
+</form>
+```
