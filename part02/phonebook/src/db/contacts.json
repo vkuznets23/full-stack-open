@@ -1,0 +1,46 @@
+{
+  "contacts": [
+    {
+      "id": 1,
+      "name": "Alexis Luettgen-Sporer",
+      "phone": "+75-356-634-5374",
+      "photo": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 2,
+      "name": "Joey Kuvalis",
+      "phone": "+34-329-673-5709",
+      "photo": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 3,
+      "name": "Dewey Morissette",
+      "phone": "+62-646-839-7213",
+      "photo": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 4,
+      "name": "Mr. Alonzo Auer-Kuphal",
+      "phone": "+07-039-073-7020",
+      "photo": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 5,
+      "name": "Brent Cole",
+      "phone": "+12-122-770-0210",
+      "photo": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 6,
+      "name": "Mr. Marlon Satterfield",
+      "phone": "+84-894-463-6350",
+      "photo": "https://via.placeholder.com/150"
+    },
+    {
+      "id": 7,
+      "name": "Al Monahan",
+      "phone": "+05-120-958-3831",
+      "photo": "https://via.placeholder.com/150"
+    }
+  ]
+}

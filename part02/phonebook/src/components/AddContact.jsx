@@ -1,4 +1,3 @@
-import Header from './Header'
 import Form from './Form'
 
 const Phonebook = ({
@@ -11,7 +10,6 @@ const Phonebook = ({
 }) => {
   return (
     <div>
-      <Header title="Phonebook" />
       <Form
         name={name}
         setName={setName}

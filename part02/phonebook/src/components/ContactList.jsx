@@ -6,10 +6,11 @@ const Numbers = ({ persons }) => {
       <Header title="Numbers" />
       {persons.map((person) => {
         return (
-          <p key={person.id}>
-            <b>{person.name} </b>
+          <div key={person.id}>
+            <img src={person.photo} style={{ width: 50 }} />
+            {person.name}
             {person.phone}
-          </p>
+          </div>
         )
       })}
     </>
