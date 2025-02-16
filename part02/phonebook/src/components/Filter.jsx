@@ -5,6 +5,7 @@ const Filter = ({ search, setSearch }) => {
   return (
     <input
       placeholder="search contact by name or number"
+      className="filter-container"
       value={search}
       onChange={handleSearchChange}
     />

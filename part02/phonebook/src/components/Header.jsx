@@ -1,8 +1,11 @@
 const Header = ({ title, children }) => {
   return (
-    <div>
-      <h2>{title}</h2>
-      {children}
+    <div className="header">
+      <div>
+        <h1>{title}</h1>
+        {children}
+      </div>
+      <button className="add-button"></button>
     </div>
   )
 }
