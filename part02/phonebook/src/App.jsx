@@ -5,6 +5,7 @@ import { AddContact, ContactList, Filter, Header, Loading } from './components'
 function App() {
   const [persons, setPersons] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isToggled, setIsToggled] = useState(false)
   const [search, setSearch] = useState('')
 
   useEffect(() => {
@@ -42,12 +43,13 @@ function App() {
   return (
     <main>
       <div className="container">
-        <Header title="Contacts">
-          <p style={{ paddingLeft: 5, paddingTop: 5 }}>
-            Total {persons.length} contacts
-          </p>
-        </Header>
-        <AddContact persons={persons} setPersons={setPersons} />
+        <Header
+          title="Contacts"
+          persons={persons}
+          setIsToggled={setIsToggled}
+          isToggled={isToggled}
+        ></Header>
+        {isToggled && <AddContact persons={persons} setPersons={setPersons} />}
         <Filter search={search} setSearch={setSearch} />
         <ContactList persons={getFilteredContacts()} setPersons={setPersons} />
       </div>

@@ -4,12 +4,18 @@ import { RiDeleteBin5Fill } from 'react-icons/ri'
 
 const ContactList = ({ persons, setPersons }) => {
   const handleDelete = async (id) => {
-    try {
-      await contactService.remove(id)
-      setPersons(persons.filter((person) => person.id !== id))
-    } catch (err) {
-      console.error('Error deleting contact:', err)
-      alert('There was an error while deleting the contact')
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this contact?'
+    )
+    if (confirmed) {
+      try {
+        await contactService.remove(id)
+
+        setPersons(persons.filter((person) => person.id !== id))
+      } catch (err) {
+        console.error('Error deleting contact:', err)
+        alert('There was an error while deleting the contact')
+      }
     }
   }
 
