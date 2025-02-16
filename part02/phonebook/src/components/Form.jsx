@@ -1,3 +1,4 @@
+import contactService from '../services/service'
 import { useState } from 'react'
 
 const isValidPhoneNumber = (number) => /^[\d+-]+$/.test(number)
@@ -34,7 +35,7 @@ const Form = ({ persons, setPersons }) => {
     setPhoto(null)
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
     const newPerson = {
@@ -57,8 +58,15 @@ const Form = ({ persons, setPersons }) => {
       alert(`${newPerson.name} is already added to the phone book`)
       return
     }
-    setPersons(persons.concat(newPerson))
-    resetForm()
+
+    try {
+      const response = await contactService.create(newPerson)
+      setPersons((prevPersons) => [...prevPersons, response])
+      resetForm()
+    } catch (error) {
+      console.error('Error creating contact:', error)
+      alert('There was an error while creating the contact')
+    }
   }
   return (
     <form onSubmit={handleSubmit}>

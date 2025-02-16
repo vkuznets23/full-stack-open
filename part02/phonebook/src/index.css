@@ -4,6 +4,7 @@
 @import url("./styles/contacts.css");
 @import url("./styles/buttons.css");
 @import url("./styles/filter.css");
+@import url("./styles/loading.css");
 
 h1 {
   font-size: 40px;

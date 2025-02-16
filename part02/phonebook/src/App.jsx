@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
-// import { contacts } from './db/contacts'
-import AddContact from './components/AddContact'
-import ContactList from './components/ContactList'
-import Filter from './components/Filter'
-import Header from './components/Header'
-
-const url = 'http://localhost:3001/contacts'
+import contactService from './services/service'
+import { AddContact, ContactList, Filter, Header, Loading } from './components'
 
 function App() {
   const [persons, setPersons] = useState([])
@@ -16,12 +10,11 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios(url)
+        const data = await contactService.getAll()
         setPersons(data)
-      } catch (err) {
-        console.error(err)
-      } finally {
         setIsLoading(false)
+      } catch (error) {
+        console.error('Failed to fetch contacts:', error)
       }
     }
     fetchData()
@@ -38,25 +31,25 @@ function App() {
     })
   }
 
+  if (isLoading) {
+    return <Loading />
+  }
+
+  if (persons.length === 0) {
+    return <p>No contacts found</p>
+  }
+
   return (
     <main>
       <div className="container">
-        {isLoading ? (
-          <p>loading</p>
-        ) : persons.length > 0 ? (
-          <>
-            <Header title="Contacts">
-              <p style={{ paddingLeft: 5, paddingTop: 5 }}>
-                total {persons.length} contacts{' '}
-              </p>
-            </Header>
-            <AddContact persons={persons} setPersons={setPersons} />
-            <Filter search={search} setSearch={setSearch} />
-            <ContactList persons={getFilteredContacts()} />
-          </>
-        ) : (
-          <p>No contacts found</p>
-        )}
+        <Header title="Contacts">
+          <p style={{ paddingLeft: 5, paddingTop: 5 }}>
+            Total {persons.length} contacts
+          </p>
+        </Header>
+        <AddContact persons={persons} setPersons={setPersons} />
+        <Filter search={search} setSearch={setSearch} />
+        <ContactList persons={getFilteredContacts()} setPersons={setPersons} />
       </div>
     </main>
   )

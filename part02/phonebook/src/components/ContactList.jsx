@@ -1,21 +1,35 @@
 import placeholder from '../assets/placeholder.png'
+import contactService from '../services/service'
+import { RiDeleteBin5Fill } from 'react-icons/ri'
 
-const Numbers = ({ persons }) => {
+const ContactList = ({ persons, setPersons }) => {
+  const handleDelete = async (id) => {
+    try {
+      await contactService.remove(id)
+      setPersons(persons.filter((person) => person.id !== id))
+    } catch (err) {
+      console.error('Error deleting contact:', err)
+      alert('There was an error while deleting the contact')
+    }
+  }
+
   return (
     <div className="contacts-list">
-      {persons.map((person) => {
+      {persons.map(({ id, name, phone, photo }) => {
         return (
-          <div key={person.id} className="contact-container">
+          <div key={id} className="contact-container">
             <img
-              src={person.photo || placeholder}
-              alt="User avatar"
+              src={photo || placeholder}
+              alt={`Avatar of ${name}`}
               className="img"
             />
             <div className="contact-data">
-              <h3>{person.name}</h3>
-              <p>{person.phone}</p>
+              <h3>{name}</h3>
+              <p>{phone}</p>
             </div>
-            <button className="delete-button"></button>
+            <button className="delete-button" onClick={() => handleDelete(id)}>
+              <RiDeleteBin5Fill style={{ fontSize: '1.1rem' }} />
+            </button>
           </div>
         )
       })}
@@ -23,4 +37,4 @@ const Numbers = ({ persons }) => {
   )
 }
 
-export default Numbers
+export default ContactList

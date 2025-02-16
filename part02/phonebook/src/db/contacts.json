@@ -1,46 +1,40 @@
 {
   "contacts": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Earl Ullrich",
       "phone": "+91-208-527-5289",
       "photo": "https://images.unsplash.com/photo-1504553101389-41a8f048c3ba?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTAwODF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Mzk2OTEwOTl8&ixlib=rb-4.0.3&q=80&w=400"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Kendra Keebler",
       "phone": "+08-614-171-7784",
       "photo": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTAwODF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Mzk2OTEwOTl8&ixlib=rb-4.0.3&q=80&w=400"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Claire Volkman",
       "phone": "+23-306-264-6982",
       "photo": "https://images.unsplash.com/photo-1604247203891-ae01b7b2f1bb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTAwODF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Mzk2OTEwOTl8&ixlib=rb-4.0.3&q=80&w=400"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Mae Crist",
       "phone": "+69-143-343-1289",
       "photo": "https://images.unsplash.com/photo-1496442485495-dcb2fa6bb0bc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTAwODF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Mzk2OTEwOTl8&ixlib=rb-4.0.3&q=80&w=400"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Pam Feeney Sr.",
       "phone": "+85-449-211-9083",
       "photo": "https://images.unsplash.com/photo-1590000011709-0a60809e0069?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTAwODF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Mzk2OTExMDB8&ixlib=rb-4.0.3&q=80&w=400"
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Andres Littel",
       "phone": "+48-495-113-4064",
       "photo": "https://images.unsplash.com/photo-1475049120922-5fd74aecbfe9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTAwODF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Mzk2OTExMDB8&ixlib=rb-4.0.3&q=80&w=400"
-    },
-    {
-      "id": 7,
-      "name": "Dominic Larkin",
-      "phone": "+26-555-650-3114",
-      "photo": "https://images.unsplash.com/photo-1596697612480-e1b6615aec10?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3MTAwODF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3Mzk2OTExMDB8&ixlib=rb-4.0.3&q=80&w=400"
     }
   ]
 }
