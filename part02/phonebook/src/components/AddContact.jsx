@@ -7,6 +7,7 @@ const Phonebook = ({
   setPersons,
   number,
   setNumber,
+  setNotification,
 }) => {
   return (
     <div>
@@ -17,6 +18,7 @@ const Phonebook = ({
         setPersons={setPersons}
         number={number}
         setNumber={setNumber}
+        setNotification={setNotification}
       />
     </div>
   )

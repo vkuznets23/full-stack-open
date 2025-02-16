@@ -2,7 +2,7 @@ import placeholder from '../assets/placeholder.png'
 import contactService from '../services/service'
 import { RiDeleteBin5Fill } from 'react-icons/ri'
 
-const ContactList = ({ persons, setPersons }) => {
+const ContactList = ({ persons, setPersons, setNotification }) => {
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       'Are you sure you want to delete this contact?'
@@ -10,11 +10,17 @@ const ContactList = ({ persons, setPersons }) => {
     if (confirmed) {
       try {
         await contactService.remove(id)
-
         setPersons(persons.filter((person) => person.id !== id))
+        setNotification({
+          message: `contact deleted from the list`,
+          type: 'success',
+        })
       } catch (err) {
         console.error('Error deleting contact:', err)
-        alert('There was an error while deleting the contact')
+        setNotification({
+          message: 'There was an error while deleting the contact',
+          type: 'error',
+        })
       }
     }
   }
