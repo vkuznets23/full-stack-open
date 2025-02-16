@@ -1,0 +1,27 @@
+@media (max-width: 860px) {
+  body {
+    background-color: #f3f3f3;
+  }
+
+  .container {
+    border: none;
+    background-color: #f3f3f3;
+    padding-inline: 3rem;
+    padding-block: 2rem;
+  }
+
+  .contacts-list {
+    padding-top: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 35px;
+  }
+
+  .container {
+    padding-inline: 1.5rem;
+    padding-block: 1.5rem;
+  }
+}

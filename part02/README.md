@@ -11,7 +11,11 @@
 2. Render the list of contacts dynamically using `.map()` and add event handler to add new contacts
 3. Implement **check for duplicate names** when adding contacts and a **search bar** to filter contacts by name.
 
-- I also added db generator using **faker API**
+   **I also added:**
+
+- db generator using **faker API** and **Unsplash API**
+- CSS styles and media queries
+- Image uploading or placeholder when no image
 
 4. Made JSON server to run my `.json file` as server using `axios` library to fetch data from the server
 
@@ -37,6 +41,13 @@ npm run server
 **Server-side(Backend):** http://localhost:3001/contacts
 
 # Some notes from the theoretic part
+
+## Table of Contents
+
+1. [Debugging](#debugging)
+2. [Event Handling in React](#event-parameter)
+3. [Creating a Form in React](#how-to-create-a-form)
+4. [Fetching Data from a Server](#getting-data-from-server)
 
 ## Debugging
 
