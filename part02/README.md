@@ -38,6 +38,7 @@ npm run server
 ```
 
 **Client-side(React):** http://localhost:5173/
+
 **Server-side(Backend):** http://localhost:3001/contacts
 
 # Some notes from the theoretic part
@@ -45,7 +46,9 @@ npm run server
 ## Useful links:
 
 read more about debugging [here](https://developer.chrome.com/docs/devtools/javascript)
+
 read more about `.map` method [here](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key)
+
 Read more [here](https://react.dev/learn/responding-to-events)
 
 ## `event` parameter
