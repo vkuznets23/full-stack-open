@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 const isValidPhoneNumber = (number) => /^[\d+-]+$/.test(number)
 
 const handlePersonExists = (persons, name) => {
@@ -6,7 +8,18 @@ const handlePersonExists = (persons, name) => {
   )
 }
 
-const Form = ({ persons, setPersons, name, setName, number, setNumber }) => {
+const Form = ({ persons, setPersons }) => {
+  const [photo, setPhoto] = useState(null)
+  const [name, setName] = useState('')
+  const [number, setNumber] = useState('')
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setPhoto(URL.createObjectURL(file))
+    }
+  }
+
   const handleNameChange = (e) => {
     setName(e.target.value)
   }
@@ -18,6 +31,7 @@ const Form = ({ persons, setPersons, name, setName, number, setNumber }) => {
   const resetForm = () => {
     setName('')
     setNumber('')
+    setPhoto(null)
   }
 
   const handleSubmit = (event) => {
@@ -27,6 +41,7 @@ const Form = ({ persons, setPersons, name, setName, number, setNumber }) => {
       id: String(persons.length + 1),
       name: name.trim(),
       phone: number,
+      photo: photo,
     }
 
     if (!newPerson.name || !newPerson.phone) {
@@ -55,6 +70,12 @@ const Form = ({ persons, setPersons, name, setName, number, setNumber }) => {
           onChange={handleNumberChange}
         />
       </div>
+      <input
+        type="file"
+        accept="image/png, image/jpeg"
+        onChange={handlePhotoChange}
+      />
+      {photo && <img src={photo} alt="Preview" width="100" />}
       <button type="submit"> add contact </button>
     </form>
   )

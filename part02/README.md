@@ -13,6 +13,8 @@
 
 - I also added db generator using **faker API**
 
+4. Made JSON server to run my `.json file` as server using `axios` library to fetch data from the server
+
 ### Countries API (2.18 — 2.20)
 
 ### How to run
@@ -28,7 +30,11 @@ cd part02
 ```bash
 npm install
 npm run dev
+npm run server
 ```
+
+**Client-side(React):** http://localhost:5173/
+**Server-side(Backend):** http://localhost:3001/contacts
 
 # Some notes from the theoretic part
 
@@ -199,4 +205,38 @@ each element looks like this in JSX:
     placeholder="email"
   />
 </div>
+```
+
+## getting data from server
+
+We can have a db.json file start the JSON Server without a separate installation by running the following npx command in the root directory of the application (this will "fake" running a real server)
+
+```js
+npx json-server --port 3001 db.json
+```
+
+it's possible to use fetch but more common way is to use axios library **(npm-commands should always be run in the project root directory!!!)**
+
+```bash
+npm install axios
+```
+
+In the setup with no db we can set JSON-server as a development dependency (only used during development) by executing the command:
+
+```bash
+npm install json-server --save-dev
+```
+
+Then need to add a script `"server": "json-server -p 3001 ./src/db/contacts.json"` to start server using
+
+```bash
+npm run server
+```
+
+`--save-dev` to add libraries etc to the `devDependencies`
+
+To connect .env keys
+
+```bash
+npm install dotenv
 ```

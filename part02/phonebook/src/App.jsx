@@ -11,8 +11,6 @@ const url = 'http://localhost:3001/contacts'
 function App() {
   const [persons, setPersons] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [name, setName] = useState('')
-  const [number, setNumber] = useState('')
   const [search, setSearch] = useState('')
 
   useEffect(() => {
@@ -48,17 +46,11 @@ function App() {
         ) : persons.length > 0 ? (
           <>
             <Header title="Contacts">
-              <p>Total {persons.length} contacts </p>
+              <p style={{ paddingLeft: 5, paddingTop: 5 }}>
+                total {persons.length} contacts{' '}
+              </p>
             </Header>
-            <AddContact
-              name={name}
-              setName={setName}
-              number={number}
-              setNumber={setNumber}
-              persons={persons}
-              setPersons={setPersons}
-            />
-
+            <AddContact persons={persons} setPersons={setPersons} />
             <Filter search={search} setSearch={setSearch} />
             <ContactList persons={getFilteredContacts()} />
           </>
