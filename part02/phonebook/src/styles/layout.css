@@ -6,6 +6,7 @@ main {
 
 .container {
   background-color: #f3f3f3;
+  margin-top: 20px;
   border-radius: 1.5rem;
   border: 1px solid #191a23;
   padding-inline: 6rem;
