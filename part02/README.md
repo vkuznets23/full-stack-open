@@ -14,7 +14,7 @@
    **I also added:**
 
 - db generator using **faker API** and **Unsplash API**
-- CSS styles and media queries
+- CSS styles and media queries + icons from react library
 - Image uploading or placeholder when no image
 
 4. Made JSON server to run my `.json file` as server using `axios` library to fetch data from the server
@@ -42,23 +42,11 @@ npm run server
 
 # Some notes from the theoretic part
 
-## Table of Contents
-
-1. [Debugging](#debugging)
-2. [Event Handling in React](#event-parameter)
-3. [Creating a Form in React](#how-to-create-a-form)
-4. [Fetching Data from a Server](#getting-data-from-server)
-
-## Debugging
-
-Rule#1 — have 10-100 `console.logs` if something doesn't work
-
-```js
-console.log("props value is", props);
-```
+## Useful links:
 
 read more about debugging [here](https://developer.chrome.com/docs/devtools/javascript)
 read more about `.map` method [here](https://react.dev/learn/preserving-and-resetting-state#option-2-resetting-state-with-a-key)
+Read more [here](https://react.dev/learn/responding-to-events)
 
 ## `event` parameter
 
@@ -67,55 +55,9 @@ read more about `.map` method [here](https://react.dev/learn/preserving-and-rese
 If you want to define your event handler inline, wrap it in an anonymous function like so (otherwise this won’t fire on click—it fires every time the component renders):
 `<button onClick={() => alert('...')}>`
 
-## Event propagation
-
-If you click on either button, its onClick will run first, followed by the parent `<div>` onClick. So two messages will appear. If you click the toolbar itself, only the parent `<div>` onClick will run.
-
-```js
-export default function Toolbar() {
-  return (
-    <div
-      className="Toolbar"
-      onClick={() => {
-        alert("You clicked on the toolbar!");
-      }}
-    >
-      <button onClick={() => alert("Playing!")}>Play Movie</button>
-      <button onClick={() => alert("Uploading!")}>Upload Image</button>
-    </div>
-  );
-}
-```
-
-To prevent this u need to **stop propagation**
-
-```js
-function Button({ onClick, children }) {
-  return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-    >
-      {children}
-    </button>
-  );
-}
-```
-
-Read more [here](https://react.dev/learn/responding-to-events)
-
 ## How to create a form
 
 1. create state for each input
-
-```js
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-```
-
 2. event handler for each input
 
 ```js
@@ -170,55 +112,7 @@ const [formData, setFormData] = useState({
 });
 ```
 
-```js
-const handleChange = (event) => {
-  const { name, value } = event.target;
-  setFormData((prevData) => ({
-    ...prevData,
-    [name]: value,
-  }));
-};
-```
-
-```js
-const handleSubmit = (event) => {
-  event.preventDefault();
-
-  if (!formData.name || !formData.email || !formData.password) {
-    setError("Все поля должны быть заполнены");
-    return;
-  }
-
-  setError("");
-  console.log(formData);
-  setFormData({ name: "", email: "", password: "" });
-};
-```
-
-each element looks like this in JSX:
-
-```js
-<div>
-  <input
-    type="text"
-    id="name"
-    name="name"
-    value={formData.name}
-    onChange={handleChange}
-    placeholder="name"
-  />
-  <input
-    type="email"
-    id="email"
-    name="email"
-    value={formData.email}
-    onChange={handleChange}
-    placeholder="email"
-  />
-</div>
-```
-
-## getting data from server
+## Getting data from server
 
 We can have a db.json file start the JSON Server without a separate installation by running the following npx command in the root directory of the application (this will "fake" running a real server)
 
@@ -226,28 +120,71 @@ We can have a db.json file start the JSON Server without a separate installation
 npx json-server --port 3001 db.json
 ```
 
-it's possible to use fetch but more common way is to use axios library **(npm-commands should always be run in the project root directory!!!)**
+##
+
+Install Axios
 
 ```bash
 npm install axios
 ```
 
-In the setup with no db we can set JSON-server as a development dependency (only used during development) by executing the command:
+Create file `service.js`
+**GET**
 
-```bash
-npm install json-server --save-dev
+```js
+import axios from "axios";
+
+const getContacts = async () => {
+  try {
+    const response = await axios.get("http://localhost:3001/contacts");
+    console.log(response.data);
+  } catch (error) {
+    console.error("Error fetching contacts:", error);
+  }
+};
 ```
 
-Then need to add a script `"server": "json-server -p 3001 ./src/db/contacts.json"` to start server using
+**POST**
 
-```bash
-npm run server
+```js
+const addContact = async (newContact) => {
+  try {
+    const response = await axios.post(
+      "http://localhost:3001/contacts",
+      newContact
+    );
+    console.log("Contact added:", response.data);
+  } catch (error) {
+    console.error("Error adding contact:", error);
+  }
+};
 ```
 
-`--save-dev` to add libraries etc to the `devDependencies`
+**DELETE**
 
-To connect .env keys
+```js
+const deleteContact = async (id) => {
+  try {
+    await axios.delete(`http://localhost:3001/contacts/${id}`);
+    console.log("Contact deleted");
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+  }
+};
+```
 
-```bash
-npm install dotenv
+**PUT**
+
+```js
+const updateContact = async (id, updatedData) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:3001/contacts/${id}`,
+      updatedData
+    );
+    console.log("Contact updated:", response.data);
+  } catch (error) {
+    console.error("Error updating contact:", error);
+  }
+};
 ```
