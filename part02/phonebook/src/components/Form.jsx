@@ -9,7 +9,7 @@ const handlePersonExists = (persons, name) => {
   )
 }
 
-const Form = ({ persons, setPersons }) => {
+const Form = ({ persons, setPersons, setNotification }) => {
   const [photo, setPhoto] = useState(null)
   const [name, setName] = useState('')
   const [number, setNumber] = useState('')
@@ -46,26 +46,42 @@ const Form = ({ persons, setPersons }) => {
     }
 
     if (!newPerson.name || !newPerson.phone) {
-      alert(`Please add both name and number`)
+      setNotification({
+        message: `Please add both name and number`,
+        type: 'error',
+      })
       return
     }
 
     if (!isValidPhoneNumber(newPerson.phone)) {
-      alert(`${newPerson.phone} is not a valid phone number`)
+      setNotification({
+        message: `${newPerson.phone} is not a valid phone number`,
+        type: 'error',
+      })
       return
     }
     if (handlePersonExists(persons, newPerson.name)) {
-      alert(`${newPerson.name} is already added to the phone book`)
+      setNotification({
+        message: `${newPerson.name} is already added to the phone book`,
+        type: 'error',
+      })
       return
     }
 
     try {
       const response = await contactService.create(newPerson)
       setPersons((prevPersons) => [...prevPersons, response])
+      setNotification({
+        message: `contact ${newPerson.name} added to the list`,
+        type: 'success',
+      })
       resetForm()
     } catch (error) {
       console.error('Error creating contact:', error)
-      alert('There was an error while creating the contact')
+      setNotification({
+        message: 'There was an error while creating the contact',
+        type: 'error',
+      })
     }
   }
   return (
