@@ -19,14 +19,16 @@
 
 4. Made JSON server to run my `.json file` as server using `axios` library to fetch data from the server
 
+### Countries API (2.18 — 2.20)
+
 ### How to run
 
-Download repo, go to the part02 folder, install dependencies and run.
+Download repo, go to the part01 folder, install dependencies and run. It's running on http://localhost:5173/
 
 ```bash
 git clone https://github.com/vkuznets23/full-stack-open.git
 cd full-stack-open
-cd part02/phonebook
+cd part02
 ```
 
 ```bash
@@ -38,34 +40,6 @@ npm run server
 **Client-side(React):** http://localhost:5173/
 
 **Server-side(Backend):** http://localhost:3001/contacts
-
-### Countries API (2.18 — 2.20)
-
-This is a React-based web application that fetches country data from the Countries API and weather data from the OpenWeatherMap API. The application allows users to search for countries, view basic information, and explore detailed weather information. The user can also navigate to a detailed view of a country and go back to the main list.
-
-### How to run
-
-Download repo, go to the part02 folder, install dependencies and run.
-
-```bash
-git clone https://github.com/vkuznets23/full-stack-open.git
-cd full-stack-open
-cd part02/info-countries
-```
-
-```bash
-npm install
-```
-
-Create a .env file at the root of the project and add your OpenWeatherMap API key:
-
-```js
-VITE_WEATHER_API_KEY = your_api_key_here;
-```
-
-```bash
-npm run dev
-```
 
 # Some notes from the theoretic part
 
