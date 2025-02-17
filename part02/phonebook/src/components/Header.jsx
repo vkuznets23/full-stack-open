@@ -11,7 +11,7 @@ const Header = ({ title, persons, isToggled, setIsToggled }) => {
         </p>
       </div>
       <button className="add-button" onClick={() => setIsToggled(!isToggled)}>
-        {isToggled ? <MdAdd /> : <IoCloseSharp />}
+        {isToggled ? <IoCloseSharp /> : <MdAdd />}
       </button>
     </div>
   )

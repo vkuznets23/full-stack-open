@@ -13,6 +13,9 @@
   .contacts-list {
     padding-top: 30px;
   }
+  .phone-name-fields {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 480px) {

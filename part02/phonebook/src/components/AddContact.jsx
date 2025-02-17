@@ -1,23 +1,11 @@
 import { Form } from '../components'
 
-const Phonebook = ({
-  name,
-  setName,
-  persons,
-  setPersons,
-  number,
-  setNumber,
-  setNotification,
-}) => {
+const Phonebook = ({ persons, setPersons, setNotification }) => {
   return (
-    <div>
+    <div className="form-container">
       <Form
-        name={name}
-        setName={setName}
         persons={persons}
         setPersons={setPersons}
-        number={number}
-        setNumber={setNumber}
         setNotification={setNotification}
       />
     </div>
