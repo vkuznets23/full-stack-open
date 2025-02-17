@@ -35,3 +35,12 @@
   color: #b9ff66;
   /* background-imsage: url("../assets/Button:hover.png"); */
 }
+
+.submit-btn {
+  margin-left: auto;
+  color: white;
+  background-color: #191a23;
+  border-radius: 10px;
+  padding-inline: 20px;
+  height: 50px;
+}

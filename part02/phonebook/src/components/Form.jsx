@@ -1,7 +1,7 @@
 import contactService from '../services/service'
 import { useState } from 'react'
 
-const isValidPhoneNumber = (number) => /^[\d+-]+$/.test(number)
+const isValidPhoneNumber = (number) => /^[\d+-]+$/.test(number.trim())
 
 const handlePersonExists = (persons, name) => {
   return persons.find(
@@ -10,42 +10,55 @@ const handlePersonExists = (persons, name) => {
 }
 
 const Form = ({ persons, setPersons, setNotification }) => {
-  const [photo, setPhoto] = useState(null)
-  const [name, setName] = useState('')
-  const [number, setNumber] = useState('')
+  const [formFields, setFormFields] = useState({
+    name: '',
+    phone: '',
+    photo: null,
+    photoPreview: null,
+  })
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0]
     if (file) {
-      setPhoto(URL.createObjectURL(file))
+      setFormFields((prevFields) => ({
+        ...prevFields,
+        photo: file,
+        photoPreview: URL.createObjectURL(file),
+      }))
     }
   }
 
   const handleNameChange = (e) => {
-    setName(e.target.value)
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      name: e.target.value,
+    }))
   }
 
   const handleNumberChange = (e) => {
-    setNumber(e.target.value)
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      phone: e.target.value,
+    }))
   }
 
   const resetForm = () => {
-    setName('')
-    setNumber('')
-    setPhoto(null)
+    if (formFields.photoPreview) {
+      URL.revokeObjectURL(formFields.photoPreview)
+    }
+    setFormFields({ name: '', phone: '', photo: null, photoPreview: null })
   }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
 
     const newPerson = {
-      id: String(persons.length + 1),
-      name: name.trim(),
-      phone: number,
-      photo: photo,
+      name: formFields.name.trim(),
+      phone: formFields.phone.trim(),
+      photo: formFields.photo,
     }
 
-    if (!newPerson.name || !newPerson.phone) {
+    if (!newPerson.name.trim() || !newPerson.phone.trim()) {
       setNotification({
         message: `Please add both name and number`,
         type: 'error',
@@ -86,21 +99,39 @@ const Form = ({ persons, setPersons, setNotification }) => {
   }
   return (
     <form onSubmit={handleSubmit}>
-      <input placeholder="name" value={name} onChange={handleNameChange} />
-      <div>
-        <input
-          placeholder="phone number"
-          value={number}
-          onChange={handleNumberChange}
-        />
+      <div className="phone-name-fields">
+        <div className="name-field">
+          <label htmlFor="phone">*Name</label>
+          <input
+            className="field-input"
+            placeholder="Pekka Salmonen"
+            value={formFields.name}
+            onChange={handleNameChange}
+          />
+        </div>
+        <div className="phone-field">
+          <label htmlFor="phone">*Phone</label>
+          <input
+            className="field-input"
+            placeholder="+358 40 123 4567"
+            value={formFields.phone}
+            onChange={handleNumberChange}
+          />
+        </div>
+        <button className="submit-btn" type="submit">
+          add
+        </button>
       </div>
-      <input
-        type="file"
-        accept="image/png, image/jpeg"
-        onChange={handlePhotoChange}
-      />
-      {photo && <img src={photo} alt="Preview" width="100" />}
-      <button type="submit"> add contact </button>
+      <div className="avatar-field">
+        <input
+          type="file"
+          accept="image/png, image/jpeg"
+          onChange={handlePhotoChange}
+        />
+        {formFields.photo && (
+          <img src={formFields.photoPreview} alt="Preview" width="50" />
+        )}
+      </div>
     </form>
   )
 }
