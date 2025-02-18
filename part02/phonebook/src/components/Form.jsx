@@ -17,6 +17,10 @@ const Form = ({ persons, setPersons, setNotification }) => {
     photoPreview: null,
   })
 
+  const handleChange = (e) => {
+    setFormFields({ ...formFields, [e.target.name]: e.target.value })
+  }
+
   const handlePhotoChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -28,25 +32,13 @@ const Form = ({ persons, setPersons, setNotification }) => {
     }
   }
 
-  const handleNameChange = (e) => {
-    setFormFields((prevFields) => ({
-      ...prevFields,
-      name: e.target.value,
-    }))
-  }
-
-  const handleNumberChange = (e) => {
-    setFormFields((prevFields) => ({
-      ...prevFields,
-      phone: e.target.value,
-    }))
-  }
-
   const resetForm = () => {
-    if (formFields.photoPreview) {
-      URL.revokeObjectURL(formFields.photoPreview)
-    }
-    setFormFields({ name: '', phone: '', photo: null, photoPreview: null })
+    setFormFields((prevFields) => {
+      if (prevFields.photoPreview) {
+        URL.revokeObjectURL(prevFields.photoPreview)
+      }
+      return { name: '', phone: '', photo: null, photoPreview: null }
+    })
   }
 
   const handleSubmit = async (event) => {
@@ -105,8 +97,9 @@ const Form = ({ persons, setPersons, setNotification }) => {
           <input
             className="field-input"
             placeholder="Pekka Salmonen"
+            name="name"
             value={formFields.name}
-            onChange={handleNameChange}
+            onChange={handleChange}
           />
         </div>
         <div className="phone-field">
@@ -114,8 +107,9 @@ const Form = ({ persons, setPersons, setNotification }) => {
           <input
             className="field-input"
             placeholder="+358 40 123 4567"
+            name="phone"
             value={formFields.phone}
-            onChange={handleNumberChange}
+            onChange={handleChange}
           />
         </div>
         <button className="submit-btn" type="submit">
@@ -126,6 +120,7 @@ const Form = ({ persons, setPersons, setNotification }) => {
         <input
           type="file"
           accept="image/png, image/jpeg"
+          name="photo"
           onChange={handlePhotoChange}
         />
         {formFields.photo && (
