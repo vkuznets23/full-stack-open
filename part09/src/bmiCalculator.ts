@@ -17,8 +17,24 @@ function calculateBmi(height: number, weight: number): calculateBmiReturn {
   else return 'Obesity'
 }
 
+// Get command-line arguments
+const args = process.argv.slice(2)
+
+if (args.length < 2) {
+  throw new Error('Error: Please provide both height and weight.')
+}
+
+const height = Number(args[0])
+const weight = Number(args[1])
+
+if (isNaN(height) || isNaN(weight)) {
+  throw new Error(
+    'Error: Please provide valid numbers for both height and weight.'
+  )
+}
+
 try {
-  console.log(calculateBmi(180, 74))
+  console.log(calculateBmi(height, weight))
 } catch (error) {
   if (error instanceof Error) console.error(error.message)
 }
