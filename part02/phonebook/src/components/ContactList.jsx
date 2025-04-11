@@ -31,7 +31,7 @@ const ContactList = ({ persons, setPersons, setNotification }) => {
         return (
           <div key={id} className="contact-container">
             <img
-              src={photo || placeholder}
+              src={photo ? `http://localhost:3001${photo}` : placeholder}
               alt={`Avatar of ${name}`}
               className="img"
             />

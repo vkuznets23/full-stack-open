@@ -40,6 +40,9 @@ const Form = ({ persons, setPersons, setNotification }) => {
       return { name: '', phone: '', photo: null, photoPreview: null }
     })
   }
+  // const resetForm = () => {
+  //   setFormFields({ name: '', phone: '' })
+  // }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -60,7 +63,7 @@ const Form = ({ persons, setPersons, setNotification }) => {
 
     if (!isValidPhoneNumber(newPerson.phone)) {
       setNotification({
-        message: `${newPerson.phone} is not a valid phone number`,
+        message: `${newPerson.phone} is not a valid phone number <br> Valid numbers: +123-456-7890 or +1234567890`,
         type: 'error',
       })
       return
@@ -73,8 +76,15 @@ const Form = ({ persons, setPersons, setNotification }) => {
       return
     }
 
+    const formData = new FormData()
+    formData.append('name', newPerson.name)
+    formData.append('phone', newPerson.phone)
+    if (formFields.photo) {
+      formData.append('photo', formFields.photo)
+    }
+
     try {
-      const response = await contactService.create(newPerson)
+      const response = await contactService.create(formData) //?
       setPersons((prevPersons) => [...prevPersons, response])
       setNotification({
         message: `contact ${newPerson.name} added to the list`,
