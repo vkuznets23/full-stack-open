@@ -1,19 +1,19 @@
 {
-  "name": "part09",
-  "version": "1.0.0",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "calculateBmi": "ts-node src/bmiCalculator.ts",
-    "calculateExercises": "ts-node src/exerciseCalculator.ts"
+    "calculateExercises": "ts-node src/exerciseCalculator.ts",
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node-dev src/index.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "dependencies": {
+    "@types/express": "^5.0.1",
+    "express": "^5.1.0"
+  },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }
 }

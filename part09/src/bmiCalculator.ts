@@ -4,7 +4,10 @@ type calculateBmiReturn =
   | 'Overweight'
   | 'Obesity'
 
-function calculateBmi(height: number, weight: number): calculateBmiReturn {
+export function calculateBmi(
+  height: number,
+  weight: number
+): calculateBmiReturn {
   if (height <= 0) throw new Error('Height must be greater than zero')
   if (weight <= 0) throw new Error('Weight must be greater than zero')
 
@@ -18,23 +21,26 @@ function calculateBmi(height: number, weight: number): calculateBmiReturn {
 }
 
 // Get command-line arguments
-const args = process.argv.slice(2)
+// const args = process.argv.slice(2)
+if (require.main === module) {
+  const args = process.argv.slice(2)
 
-if (args.length < 2) {
-  throw new Error('Error: Please provide both height and weight.')
-}
+  if (args.length < 2) {
+    throw new Error('Error: Please provide both height and weight.')
+  }
 
-const height = Number(args[0])
-const weight = Number(args[1])
+  const height = Number(args[0])
+  const weight = Number(args[1])
 
-if (isNaN(height) || isNaN(weight)) {
-  throw new Error(
-    'Error: Please provide valid numbers for both height and weight.'
-  )
-}
+  if (isNaN(height) || isNaN(weight)) {
+    throw new Error(
+      'Error: Please provide valid numbers for both height and weight.'
+    )
+  }
 
-try {
-  console.log(calculateBmi(height, weight))
-} catch (error) {
-  if (error instanceof Error) console.error(error.message)
+  try {
+    console.log(calculateBmi(height, weight))
+  } catch (error) {
+    if (error instanceof Error) console.error(error.message)
+  }
 }
