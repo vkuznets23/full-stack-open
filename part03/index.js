@@ -23,13 +23,13 @@ let data = [
     id: 1,
     name: 'Tracy Donnelly',
     phone: '+36-337-045-5325',
-    photo: '/uploads/1.avif',
+    photo: '/uploads/2.avif',
   },
   {
     id: 2,
     name: 'Ervin Nicolas Sr.',
     phone: '+30-226-892-8371',
-    photo: '/uploads/2.avif',
+    photo: '/uploads/1.avif',
   },
   {
     id: 3,
