@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 
 let data = [
@@ -23,8 +24,15 @@ let data = [
     number: '39-23-6423122',
   },
 ]
-
+// app.use(morgan('dev'))
 app.use(express.json())
+
+// Custom token for logging POST data
+morgan.token('post-data', (req) => {
+  return req.method === 'POST' ? JSON.stringify(req.body) : ''
+})
+
+app.use(morgan(':method :url :status :response-time ms :post-data'))
 
 app.get('/api/persons', (req, res) => {
   res.json(data)
