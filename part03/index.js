@@ -1,41 +1,84 @@
-// const http = require('http')
-
-// const app = http.createServer((request, response) => {
-//   response.writeHead(200, { 'Content-Type': 'text/plain' })
-//   response.end('Hello World')
-// })
-
-// const PORT = 3001
-// app.listen(PORT)
-// console.log(`Server running on port ${PORT}`)
-
 const express = require('express')
 const app = express()
 
-let notes = [
+let data = [
   {
     id: '1',
-    content: 'HTML is easy',
-    important: true,
+    name: 'Arto Hellas',
+    number: '040-123456',
   },
   {
     id: '2',
-    content: 'Browser can execute only JavaScript',
-    important: false,
+    name: 'Ada Lovelace',
+    number: '39-44-5323523',
   },
   {
     id: '3',
-    content: 'GET and POST are the most important methods of HTTP protocol',
-    important: true,
+    name: 'Dan Abramov',
+    number: '12-43-234345',
+  },
+  {
+    id: '4',
+    name: 'Mary Poppendieck',
+    number: '39-23-6423122',
   },
 ]
 
-app.get('/', (request, response) => {
-  response.send('<h1>Hello World!</h1>')
+app.use(express.json())
+
+app.get('/api/persons', (req, res) => {
+  res.json(data)
 })
 
-app.get('/api/notes', (request, response) => {
-  response.json(notes)
+app.get('/info', (_req, res) => {
+  const peopleAmount = data.length
+  const currentDate = new Date().toString()
+  res.send(`Phonebook has info for ${peopleAmount} people <br> ${currentDate}`)
+})
+
+app.get('/api/persons/:id', (req, res) => {
+  const id = req.params.id
+  const person = data.find((person) => person.id === id)
+  if (person) res.json(person)
+  else res.status(404).end()
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+  const id = req.params.id
+  // const persons = data.filter((person) => person.id !== id)
+  // res.json(persons)
+
+  const personIndex = data.findIndex((person) => person.id === id)
+
+  if (personIndex !== -1) {
+    data.splice(personIndex, 1)
+    res.status(204).end()
+  } else {
+    res.status(404).json({ error: 'Person not found' })
+  }
+})
+
+app.post('/api/persons', (req, res) => {
+  const body = req.body
+
+  if (!body.name || !body.number) {
+    return res.status(400).json({
+      error: 'Name or number missing',
+    })
+  }
+  if (data.find((person) => person.name === body.name))
+    return res.status(400).json({
+      error: 'Name already exists',
+    })
+
+  const newId = String(data.length + 1)
+  const newPerson = {
+    id: newId,
+    name: body.name,
+    number: body.number,
+  }
+  data = data.push(newPerson)
+  res.json(newPerson)
 })
 
 const PORT = 3001
