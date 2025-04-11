@@ -45,17 +45,16 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
   const id = req.params.id
-  // const persons = data.filter((person) => person.id !== id)
-  // res.json(persons)
+  data = data.filter((person) => person.id !== id)
+  res.status(204).end()
 
-  const personIndex = data.findIndex((person) => person.id === id)
-
-  if (personIndex !== -1) {
-    data.splice(personIndex, 1)
-    res.status(204).end()
-  } else {
-    res.status(404).json({ error: 'Person not found' })
-  }
+  // const personIndex = data.findIndex((person) => person.id === id)
+  // if (personIndex !== -1) {
+  //   data.splice(personIndex, 1)
+  //   res.status(204).end()
+  // } else {
+  //   res.status(404).json({ error: 'Person not found' })
+  // }
 })
 
 app.post('/api/persons', (req, res) => {
@@ -63,12 +62,12 @@ app.post('/api/persons', (req, res) => {
 
   if (!body.name || !body.number) {
     return res.status(400).json({
-      error: 'Name or number missing',
+      error: 'name or number missing',
     })
   }
   if (data.find((person) => person.name === body.name))
     return res.status(400).json({
-      error: 'Name already exists',
+      error: 'name must be unique',
     })
 
   const newId = String(data.length + 1)
