@@ -1,37 +1,39 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import contactService from './services/service'
+import { toast, ToastContainer } from 'react-toastify'
 import {
   AddContact,
   ContactList,
   Filter,
   Header,
   Loading,
-  Notification,
+  ConfirmationModal,
 } from './components'
 
 function App() {
   const [persons, setPersons] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [isToggled, setIsToggled] = useState(false)
-  const [notification, setNotification] = useState({
-    message: null,
-    type: null,
-  })
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [contactToDelete, setContactToDelete] = useState(null)
   const [search, setSearch] = useState('')
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await contactService.getAll()
-        setPersons(data)
-        setIsLoading(false)
-      } catch (error) {
-        console.error('Failed to fetch contacts:', error)
-        setNotification({ message: 'Failed to fetch contacts', type: 'error' })
-      }
+  const fetchData = useCallback(async () => {
+    try {
+      const data = await contactService.getAll()
+      setPersons(data)
+      setIsLoading(false)
+    } catch (error) {
+      console.error('Failed to fetch contacts:', error)
+      toast.error(`Failed to fetch contacts: ${error.message}`)
+    } finally {
+      setIsLoading(false)
     }
-    fetchData()
   }, [])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   const getFilteredContacts = () => {
     const searchLower = search.toLowerCase()
@@ -44,41 +46,65 @@ function App() {
     })
   }
 
-  if (isLoading) {
-    return <Loading />
+  const handleDelete = (id) => {
+    setContactToDelete(id)
+    setIsModalOpen(true)
+  }
+  const handleConfirm = async () => {
+    try {
+      await contactService.remove(contactToDelete)
+      setPersons(persons.filter((person) => person.id !== contactToDelete))
+      toast.success(`contact deleted from the list`)
+      setIsModalOpen(false)
+    } catch (err) {
+      console.error('Error deleting contact:', err)
+      toast.error(
+        `There was an error while deleting the contact: ${err.message}`
+      )
+      setIsModalOpen(false)
+    }
   }
 
-  if (persons.length === 0) {
-    return <p>No contacts found</p>
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
+
+  if (isLoading) {
+    return <Loading />
   }
 
   return (
     <main>
       <div className="container">
-        <Notification
-          message={notification.message}
-          type={notification.type}
-          setMessage={(msg, type) => setNotification({ message: msg, type })}
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          newestOnTop
+          stopOnFocus={true}
         />
+        {isModalOpen && (
+          <ConfirmationModal
+            message="Are you sure you want to delete this contact?"
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+        )}
         <Header
           title="Contacts"
           persons={persons}
           setIsToggled={setIsToggled}
           isToggled={isToggled}
         ></Header>
-        {isToggled && (
-          <AddContact
-            persons={persons}
-            setPersons={setPersons}
-            setNotification={setNotification}
+        {isToggled && <AddContact persons={persons} setPersons={setPersons} />}
+        <Filter search={search} setSearch={setSearch} />
+        {persons.length === 0 ? (
+          <p style={{ marginTop: 20 }}>No contacts found</p>
+        ) : (
+          <ContactList
+            persons={getFilteredContacts()}
+            handleDelete={handleDelete}
           />
         )}
-        <Filter search={search} setSearch={setSearch} />
-        <ContactList
-          persons={getFilteredContacts()}
-          setPersons={setPersons}
-          setNotification={setNotification}
-        />
       </div>
     </main>
   )

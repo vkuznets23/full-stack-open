@@ -1,13 +1,9 @@
 import { Form } from '../components'
 
-const Phonebook = ({ persons, setPersons, setNotification }) => {
+const Phonebook = ({ persons, setPersons }) => {
   return (
     <div className="form-container">
-      <Form
-        persons={persons}
-        setPersons={setPersons}
-        setNotification={setNotification}
-      />
+      <Form persons={persons} setPersons={setPersons} />
     </div>
   )
 }

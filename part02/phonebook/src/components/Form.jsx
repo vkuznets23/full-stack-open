@@ -1,15 +1,9 @@
 import contactService from '../services/service'
 import { useState } from 'react'
+import { toast } from 'react-toastify'
+import { isValidPhoneNumber, handlePersonExists } from '../utils'
 
-const isValidPhoneNumber = (number) => /^[\d+-]+$/.test(number.trim())
-
-const handlePersonExists = (persons, name) => {
-  return persons.find(
-    (person) => person.name.toLowerCase() === name.toLowerCase()
-  )
-}
-
-const Form = ({ persons, setPersons, setNotification }) => {
+const Form = ({ persons, setPersons }) => {
   const [formFields, setFormFields] = useState({
     name: '',
     phone: '',
@@ -37,12 +31,14 @@ const Form = ({ persons, setPersons, setNotification }) => {
       if (prevFields.photoPreview) {
         URL.revokeObjectURL(prevFields.photoPreview)
       }
-      return { name: '', phone: '', photo: null, photoPreview: null }
+      return {
+        name: '',
+        phone: '',
+        photo: null,
+        photoPreview: null,
+      }
     })
   }
-  // const resetForm = () => {
-  //   setFormFields({ name: '', phone: '' })
-  // }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -50,29 +46,30 @@ const Form = ({ persons, setPersons, setNotification }) => {
     const newPerson = {
       name: formFields.name.trim(),
       phone: formFields.phone.trim(),
-      photo: formFields.photo,
+      photoUrl: formFields.photoUrl,
     }
 
     if (!newPerson.name.trim() || !newPerson.phone.trim()) {
-      setNotification({
-        message: `Please add both name and number`,
-        type: 'error',
+      toast.error(`Please add both name and number`, {
+        hideProgressBar: true,
       })
       return
     }
 
     if (!isValidPhoneNumber(newPerson.phone)) {
-      setNotification({
-        message: `${newPerson.phone} is not a valid phone number <br> Valid numbers: +123-456-7890 or +1234567890`,
-        type: 'error',
-      })
+      toast.error(
+        `${newPerson.phone} is not a valid phone number <br> Valid numbers: +123-456-7890 or +1234567890`,
+        {
+          hideProgressBar: true,
+        }
+      )
       return
     }
     if (handlePersonExists(persons, newPerson.name)) {
-      setNotification({
-        message: `${newPerson.name} is already added to the phone book`,
-        type: 'error',
-      })
+      toast.error(`${newPerson.name} is already added to the phone book`),
+        {
+          hideProgressBar: true,
+        }
       return
     }
 
@@ -84,30 +81,32 @@ const Form = ({ persons, setPersons, setNotification }) => {
     }
 
     try {
-      const response = await contactService.create(formData) //?
+      const response = await contactService.create(formData)
       setPersons((prevPersons) => [...prevPersons, response])
-      setNotification({
-        message: `contact ${newPerson.name} added to the list`,
-        type: 'success',
-      })
+      toast.success(`contact ${newPerson.name} added to the list`)
       resetForm()
     } catch (error) {
       console.error('Error creating contact:', error)
-      setNotification({
-        message: 'There was an error while creating the contact',
-        type: 'error',
-      })
+      toast.error(
+        `There was an error while creating the contact: ${error.message}`,
+        {
+          hideProgressBar: true,
+        }
+      )
     }
   }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="phone-name-fields">
         <div className="name-field">
-          <label htmlFor="phone">*Name</label>
+          <label htmlFor="name">*Name</label>
           <input
             className="field-input"
-            placeholder="Pekka Salmonen"
             name="name"
+            id="name"
+            autoComplete="off"
+            placeholder="Pekka Salmonen"
             value={formFields.name}
             onChange={handleChange}
           />
@@ -116,8 +115,10 @@ const Form = ({ persons, setPersons, setNotification }) => {
           <label htmlFor="phone">*Phone</label>
           <input
             className="field-input"
-            placeholder="+358 40 123 4567"
             name="phone"
+            id="phone"
+            autoComplete="off"
+            placeholder="+358-40-123-4567"
             value={formFields.phone}
             onChange={handleChange}
           />
@@ -130,7 +131,7 @@ const Form = ({ persons, setPersons, setNotification }) => {
         <input
           type="file"
           accept="image/png, image/jpeg"
-          name="photo"
+          id="photo"
           onChange={handlePhotoChange}
         />
         {formFields.photo && (

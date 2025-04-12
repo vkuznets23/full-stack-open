@@ -1,37 +1,14 @@
 import placeholder from '../assets/placeholder.png'
-import contactService from '../services/service'
 import { RiDeleteBin5Fill } from 'react-icons/ri'
 
-const ContactList = ({ persons, setPersons, setNotification }) => {
-  const handleDelete = async (id) => {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this contact?'
-    )
-    if (confirmed) {
-      try {
-        await contactService.remove(id)
-        setPersons(persons.filter((person) => person.id !== id))
-        setNotification({
-          message: `contact deleted from the list`,
-          type: 'success',
-        })
-      } catch (err) {
-        console.error('Error deleting contact:', err)
-        setNotification({
-          message: 'There was an error while deleting the contact',
-          type: 'error',
-        })
-      }
-    }
-  }
-
+const ContactList = ({ persons, handleDelete }) => {
   return (
     <div className="contacts-list">
-      {persons.map(({ id, name, phone, photo }) => {
+      {persons.map(({ id, name, phone, photoUrl }) => {
         return (
           <div key={id} className="contact-container">
             <img
-              src={photo ? `http://localhost:3001${photo}` : placeholder}
+              src={photoUrl ? `http://localhost:3001${photoUrl}` : placeholder}
               alt={`Avatar of ${name}`}
               className="img"
             />
