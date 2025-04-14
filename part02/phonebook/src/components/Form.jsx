@@ -2,7 +2,7 @@ import contactService from '../services/service'
 import placeholder from '/assets/placeholder.png'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { isValidPhoneNumber, handlePersonExists } from '../utils'
+import { handlePersonExists } from '../utils'
 
 const Form = ({ persons, setPersons }) => {
   const [formFields, setFormFields] = useState({
@@ -12,9 +12,57 @@ const Form = ({ persons, setPersons }) => {
     photoPreview: null,
   })
 
-  const handleChange = (e) => {
-    setFormFields({ ...formFields, [e.target.name]: e.target.value })
+  //delete
+  const formatPhoneNumber = (phone) => {
+    let phoneNumber = phone.replace(/\D/g, '')
+
+    if (phoneNumber.length > 15) {
+      phoneNumber = phoneNumber.slice(0, 15)
+    }
+
+    if (phoneNumber.length > 3 && phoneNumber.length <= 6) {
+      phoneNumber = `+${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3)}`
+    } else if (phoneNumber.length > 6 && phoneNumber.length <= 9) {
+      phoneNumber = `+${phoneNumber.slice(0, 3)}-${phoneNumber.slice(
+        3,
+        5
+      )}-${phoneNumber.slice(5)}`
+    } else if (phoneNumber.length > 9 && phoneNumber.length <= 12) {
+      phoneNumber = `+${phoneNumber.slice(0, 3)}-${phoneNumber.slice(
+        3,
+        5
+      )}-${phoneNumber.slice(5, 8)}-${phoneNumber.slice(8)}`
+    } else if (phoneNumber.length > 12) {
+      phoneNumber = `+${phoneNumber.slice(0, 3)}-${phoneNumber.slice(
+        3,
+        5
+      )}-${phoneNumber.slice(5, 8)}-${phoneNumber.slice(
+        8,
+        12
+      )}-${phoneNumber.slice(12)}`
+    } else {
+      phoneNumber = `+${phoneNumber.slice(0, 3)}`
+    }
+
+    return phoneNumber
   }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+
+    if (name === 'phone') {
+      const formattedPhone = formatPhoneNumber(value)
+      setFormFields({ ...formFields, phone: formattedPhone })
+    } else {
+      setFormFields({ ...formFields, [name]: value })
+    }
+  }
+
+  //DelTe
+
+  // const handleChange = (e) => {
+  //   setFormFields({ ...formFields, [e.target.name]: e.target.value })
+  // }
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0]
@@ -57,15 +105,15 @@ const Form = ({ persons, setPersons }) => {
       return
     }
 
-    if (!isValidPhoneNumber(newPerson.phone)) {
-      toast.error(
-        `${newPerson.phone} is not a valid phone number <br> Valid numbers: +123-456-7890 or +1234567890`,
-        {
-          hideProgressBar: true,
-        }
-      )
-      return
-    }
+    // if (!isValidPhoneNumber(newPerson.phone)) {
+    //   toast.error(
+    //     `${newPerson.phone} is not a valid phone number <br> Valid numbers: +123-456-7890 or +1234567890`,
+    //     {
+    //       hideProgressBar: true,
+    //     }
+    //   )
+    //   return
+    // }
     if (handlePersonExists(persons, newPerson.name)) {
       toast.error(`${newPerson.name} is already added to the phone book`),
         {
@@ -97,6 +145,12 @@ const Form = ({ persons, setPersons }) => {
     }
   }
 
+  const handleFocus = () => {
+    if (!formFields.phone.startsWith('+')) {
+      setFormFields({ ...formFields, phone: '+' })
+    }
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="phone-name-fields">
@@ -122,6 +176,8 @@ const Form = ({ persons, setPersons }) => {
             placeholder="+358-40-123-4567"
             value={formFields.phone}
             onChange={handleChange}
+            maxLength={16}
+            onFocus={handleFocus}
           />
         </div>
         <button className="submit-btn" type="submit">
