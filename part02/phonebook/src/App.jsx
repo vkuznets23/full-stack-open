@@ -78,7 +78,7 @@ function App() {
       <div className="container">
         <ToastContainer
           position="bottom-right"
-          autoClose={5000}
+          autoClose={3000}
           newestOnTop
           stopOnFocus={true}
         />

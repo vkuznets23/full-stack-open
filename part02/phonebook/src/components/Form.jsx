@@ -1,4 +1,5 @@
 import contactService from '../services/service'
+import placeholder from '/assets/placeholder.png'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { isValidPhoneNumber, handlePersonExists } from '../utils'
@@ -46,7 +47,7 @@ const Form = ({ persons, setPersons }) => {
     const newPerson = {
       name: formFields.name.trim(),
       phone: formFields.phone.trim(),
-      photoUrl: formFields.photoUrl,
+      photoUrl: formFields.photoUrl || placeholder,
     }
 
     if (!newPerson.name.trim() || !newPerson.phone.trim()) {

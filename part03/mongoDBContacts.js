@@ -16,7 +16,8 @@ mongoose
 const contactSchema = new mongoose.Schema({
   name: String,
   phone: String,
-  photoUrl: String,
+  photoBuffer: Buffer,
+  // photoUrl: String,
 })
 
 contactSchema.set('toJSON', {
@@ -24,6 +25,14 @@ contactSchema.set('toJSON', {
     returnedObject.id = returnedObject._id.toString()
     delete returnedObject._id
     delete returnedObject.__v
+
+    if (returnedObject.photoBuffer) {
+      const buffer = Buffer.from(returnedObject.photoBuffer)
+      returnedObject.photoUrl = `data:image/jpeg;base64,${buffer.toString(
+        'base64'
+      )}`
+    }
+    delete returnedObject.photoBuffer
   },
 })
 

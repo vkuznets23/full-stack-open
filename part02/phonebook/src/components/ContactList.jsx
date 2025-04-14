@@ -1,4 +1,4 @@
-import placeholder from '../assets/placeholder.png'
+import placeholder from '/assets/placeholder.png'
 import { RiDeleteBin5Fill } from 'react-icons/ri'
 
 const ContactList = ({ persons, handleDelete }) => {
@@ -8,7 +8,7 @@ const ContactList = ({ persons, handleDelete }) => {
         return (
           <div key={id} className="contact-container">
             <img
-              src={photoUrl ? `http://localhost:3001${photoUrl}` : placeholder}
+              src={photoUrl || placeholder}
               alt={`Avatar of ${name}`}
               className="img"
             />

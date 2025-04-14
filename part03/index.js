@@ -2,31 +2,12 @@ const Contact = require('./mongoDBContacts')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const fs = require('fs')
-const path = require('path')
 const multer = require('multer')
 
-// Ensure uploads directory exists
-const uploadDir = path.join(__dirname, 'uploads')
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir)
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/')
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}_${file.originalname}`)
-  },
-})
-
+const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
-
 const app = express()
 
-// Serve static files from the uploads directory
-app.use('/uploads', express.static('uploads'))
 app.use(cors())
 app.use(express.json())
 
@@ -68,7 +49,7 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', upload.single('photo'), async (req, res, next) => {
   const { name, phone } = req.body
-  const photoUrl = req.file ? `/uploads/${req.file.filename}` : ''
+  const photoBuffer = req.file ? req.file.buffer : null
 
   if (!name || !phone) {
     return res.status(400).json({
@@ -86,10 +67,20 @@ app.post('/api/persons', upload.single('photo'), async (req, res, next) => {
     const newContact = new Contact({
       name,
       phone,
+      photoBuffer,
+    })
+
+    const savedContact = await newContact.save()
+    const photoUrl = savedContact.photoBuffer
+      ? `data:image/jpeg;base64,${savedContact.photoBuffer.toString('base64')}`
+      : null
+
+    res.json({
+      id: savedContact._id,
+      name,
+      phone,
       photoUrl,
     })
-    const savedContact = await newContact.save()
-    res.json(savedContact)
   } catch (error) {
     next(error)
   }
