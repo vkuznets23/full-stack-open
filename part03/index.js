@@ -1,8 +1,10 @@
-const Contact = require('./mongoDBContacts')
+const Contact = require('./models/mongoDBContacts')
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const multer = require('multer')
+const unknownEndpoint = require('./middleware/unknownEndpoint')
+const errorHandler = require('./middleware/errorHandler')
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
@@ -15,7 +17,6 @@ app.use(express.json())
 morgan.token('post-data', (req) => {
   return req.method === 'POST' ? JSON.stringify(req.body) : ''
 })
-
 app.use(morgan(':method :url :status :response-time ms :post-data'))
 
 app.get('/api/persons', (_req, res) => {
@@ -30,15 +31,17 @@ app.get('/info', async (_req, res) => {
   res.send(`Phonebook has info for ${peopleAmount} people <br> ${currentDate}`)
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   const id = req.params.id
-  Contact.findById(id).then((person) => {
-    if (person) res.json(person)
-    else res.status(404).end()
-  })
+  Contact.findById(id)
+    .then((person) => {
+      if (person) res.json(person)
+      else res.status(404).end()
+    })
+    .catch((error) => next(error)) // <<<< here we send error to errorHandler
 })
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   const id = req.params.id
   Contact.findByIdAndDelete(id)
     .then(() => {
@@ -85,6 +88,9 @@ app.post('/api/persons', upload.single('photo'), async (req, res, next) => {
     next(error)
   }
 })
+
+app.use(unknownEndpoint)
+app.use(errorHandler)
 
 const PORT = 3001
 app.listen(PORT, () => {

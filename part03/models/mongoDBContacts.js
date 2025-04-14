@@ -17,7 +17,6 @@ const contactSchema = new mongoose.Schema({
   name: String,
   phone: String,
   photoBuffer: Buffer,
-  // photoUrl: String,
 })
 
 contactSchema.set('toJSON', {
