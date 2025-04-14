@@ -14,8 +14,14 @@ mongoose
   })
 
 const contactSchema = new mongoose.Schema({
-  name: String,
-  phone: String,
+  name: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+  },
   photoBuffer: Buffer,
 })
 

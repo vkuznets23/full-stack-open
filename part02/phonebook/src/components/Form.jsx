@@ -2,7 +2,7 @@ import contactService from '../services/service'
 import placeholder from '/assets/placeholder.png'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import { handlePersonExists } from '../utils'
+import { isValidPhoneNumber, handlePersonExists } from '../utils'
 
 const Form = ({ persons, setPersons }) => {
   const [formFields, setFormFields] = useState({
@@ -105,15 +105,15 @@ const Form = ({ persons, setPersons }) => {
       return
     }
 
-    // if (!isValidPhoneNumber(newPerson.phone)) {
-    //   toast.error(
-    //     `${newPerson.phone} is not a valid phone number <br> Valid numbers: +123-456-7890 or +1234567890`,
-    //     {
-    //       hideProgressBar: true,
-    //     }
-    //   )
-    //   return
-    // }
+    if (!isValidPhoneNumber(newPerson.phone)) {
+      toast.error(
+        `${newPerson.phone} is not a valid phone number. It doesnt match +XXX-XX-XXX-XXXX`,
+        {
+          hideProgressBar: true,
+        }
+      )
+      return
+    }
     if (handlePersonExists(persons, newPerson.name)) {
       toast.error(`${newPerson.name} is already added to the phone book`),
         {
