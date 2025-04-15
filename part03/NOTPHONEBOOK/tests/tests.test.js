@@ -88,4 +88,9 @@ describe('total likes', () => {
       blogs: 3,
     })
   })
+
+  test('most likes author', () => {
+    const result = helpers.mostLikes(blogs)
+    assert.deepStrictEqual(result, { author: 'Alice', likes: 12 })
+  })
 })
