@@ -10,9 +10,6 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "esModuleInterop": true,
-    "declaration": true,
-
-    "target": "ES6",
-    "module": "commonjs",
+    "declaration": true
   }
 }
