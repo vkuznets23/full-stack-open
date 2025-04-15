@@ -1,19 +1,27 @@
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-const contactRoutes = require('./routes/contacts')
-const errorHandler = require('./middleware/errorHandler')
-const unknownEndpoint = require('./middleware/unknownEndpoint')
+const config = require('./utils/config')
+const logger = require('./utils/loggers')
+const middleware = require('./utils/middleware')
+const contactsRouter = require('./controllers/contacts')
 
 const app = express()
 
+// Middleware
 app.use(cors())
 app.use(express.json())
-app.use(morgan('dev'))
 
-app.use('/api/persons', contactRoutes)
+morgan.token('post-data', (req) =>
+  req.method === 'POST' ? JSON.stringify(req.body) : ''
+)
+app.use(morgan(':method :url :status :response-time ms :post-data'))
 
-app.use(unknownEndpoint)
-app.use(errorHandler)
+// Routes
+app.use('/api/persons', contactsRouter)
+
+// Custom middleware
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 module.exports = app

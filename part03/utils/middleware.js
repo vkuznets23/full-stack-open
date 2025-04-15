@@ -1,5 +1,7 @@
+const logger = require('./loggers')
+
 const errorHandler = (error, request, response, next) => {
-  console.error('Error:', error.name, error.message)
+  logger.error('Error:', error.name, error.message)
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   }
@@ -18,4 +20,8 @@ const errorHandler = (error, request, response, next) => {
   return response.status(500).json({ error: 'Internal server error' })
 }
 
-module.exports = errorHandler
+const unknownEndpoint = (_request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+module.exports = { errorHandler, unknownEndpoint }
