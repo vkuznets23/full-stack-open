@@ -1,0 +1,35 @@
+@import url("./styles/base.css");
+@import url("./styles/layout.css");
+@import url("./styles/media.css");
+@import url("./styles/contacts.css");
+@import url("./styles/buttons.css");
+@import url("./styles/filter.css");
+@import url("./styles/loading.css");
+@import url("./styles/form.css");
+@import url("./styles/notification.css");
+@import url("./styles/modal.css");
+@import url("./styles/toastify.css");
+
+h1 {
+  font-size: 40px;
+  font-weight: 500;
+  background-color: #b9ff66;
+  display: inline;
+  padding-inline: 7px;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 400;
+}
+
+p {
+  color: #929292;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+}
