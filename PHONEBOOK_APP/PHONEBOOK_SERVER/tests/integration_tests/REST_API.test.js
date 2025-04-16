@@ -101,19 +101,18 @@ describe('Contacts API', () => {
       assert.ok(resp.body.photoUrl.startsWith('data:image/jpeg;base64,'))
 
       // check that contact is in db
-      // const contactsAfterPost = await api.get('/api/persons')
-      // console.log(contactsAfterPost)
+      const contactsAfterPost = await api.get('/api/persons')
 
-      // assert.strictEqual(
-      //   contactsAfterPost.body.length,
-      //   helpers.initialContacts.length + 1
-      // )
+      assert.strictEqual(
+        contactsAfterPost.body.length,
+        helpers.initialContacts.length + 1
+      )
 
-      // const addedContact = contactsAfterPost.body.find(
-      //   (c) => c.name === requestBody.name
-      // )
-      // assert.ok(addedContact)
-      // assert.ok(addedContact.photoBuffer)
+      const addedContact = contactsAfterPost.body.find(
+        (c) => c.name === requestBody.name
+      )
+      assert.ok(addedContact)
+      assert.ok(addedContact.photoUrl)
     })
   })
 })
