@@ -24,7 +24,7 @@ beforeEach(async () => {
   console.log('done initializing')
 })
 
-test.only('blogs are returned as json', async () => {
+test('blogs are returned as json', async () => {
   console.log('entered test')
   await api
     .get('/api/blogs')
@@ -32,7 +32,7 @@ test.only('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
-test.only('blogs list contains the correct number of blogs', async () => {
+test('blogs list contains the correct number of blogs', async () => {
   console.log('entered test')
   const response = await api
     .get('/api/blogs')
@@ -41,7 +41,7 @@ test.only('blogs list contains the correct number of blogs', async () => {
   assert.strictEqual(response.body.length, initialData.length)
 })
 
-test.only('blog has id not _id', async () => {
+test('blog has id not _id', async () => {
   console.log('entered test')
   const response = await api
     .get('/api/blogs')
@@ -52,7 +52,7 @@ test.only('blog has id not _id', async () => {
   assert.strictEqual(blog._id, undefined)
 })
 
-test.only('POST request works', async () => {
+test('POST request works', async () => {
   console.log('entered test')
   const responseBefore = await api.get('/api/blogs')
   const initialLen = responseBefore.body.length
@@ -79,7 +79,7 @@ test.only('POST request works', async () => {
   assert.ok(titles.includes('New Blog Title'))
 })
 
-test.only('if likes property is missing it set to 0', async () => {
+test('if likes property is missing it set to 0', async () => {
   console.log('entered test')
 
   const newBlog = {
@@ -97,7 +97,7 @@ test.only('if likes property is missing it set to 0', async () => {
   assert.strictEqual(response.body.likes, 0)
 })
 
-test.only('title is missing', async () => {
+test('title is missing', async () => {
   const blogNoTitle = {
     author: 'Test Author',
     url: 'http://testurl.com',
@@ -106,12 +106,45 @@ test.only('title is missing', async () => {
   const response = await api.post('/api/blogs').send(blogNoTitle).expect(400)
 })
 
-test.only('url is missing', async () => {
+test('url is missing', async () => {
   const blogNoUrl = {
     title: 'New Blog Title',
     author: 'Test Author',
   }
   const response = await api.post('/api/blogs').send(blogNoUrl).expect(400)
+})
+
+test.only('DELETE request', async () => {
+  const responseAtStart = await api.get('/api/blogs')
+  const blogToDelete = responseAtStart.body[0]
+
+  await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+  const responseAtEnd = await api.get('/api/blogs')
+  assert.strictEqual(responseAtEnd.body.length, responseAtStart.body.length - 1)
+})
+
+test.only('PUT request', async () => {
+  const responseAtStart = await api.get('/api/blogs')
+  const blogToChange = responseAtStart.body[0]
+
+  console.log(blogToChange.id)
+
+  const updatedBlog = {
+    title: 'NEW BLOG TITLE',
+    author: 'String',
+    url: 'String',
+    likes: 4,
+  }
+  await api
+    .put(`/api/blogs/${blogToChange.id}`)
+    .send(updatedBlog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const responseAtEnd = await api.get('/api/blogs')
+  const changedBlog = responseAtEnd.body.find((b) => b.id === blogToChange.id)
+
+  assert.strictEqual(changedBlog.title, updatedBlog.title)
 })
 
 after(async () => {
