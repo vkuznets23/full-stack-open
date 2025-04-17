@@ -1,7 +1,9 @@
 const express = require('express')
+const jwt = require('jsonwebtoken')
 const router = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const { userExtractor } = require('../utils/middleware')
 
 router.use(express.json())
 
@@ -14,14 +16,17 @@ router.get('/', async (_request, response, next) => {
   }
 })
 
-router.post('/', async (request, response, next) => {
+router.post('/', userExtractor, async (request, response, next) => {
   try {
     const body = request.body
     if (!body.title || !body.url) {
       return response.status(400).json({ error: 'title and url are required' })
     }
 
-    const user = await User.findById(body.userId)
+    const user = await User.findById(request.user.id)
+    if (!user) {
+      return response.status(404).json({ error: 'User not found' })
+    }
 
     const blog = new Blog({
       title: body.title,
@@ -39,9 +44,15 @@ router.post('/', async (request, response, next) => {
   }
 })
 
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', userExtractor, async (req, res, next) => {
   try {
     const id = req.params.id
+    const blog = await Blog.findById(id)
+
+    if (blog.user.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Permission denied' })
+    }
+
     await Blog.findByIdAndDelete(id)
     res.status(204).end()
   } catch (error) {
@@ -49,9 +60,15 @@ router.delete('/:id', async (req, res, next) => {
   }
 })
 
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', userExtractor, async (req, res, next) => {
   try {
     const id = req.params.id
+
+    const blog = await Blog.findById(id)
+    if (blog.user.toString() !== req.user.id) {
+      return res.status(403).json({ error: 'Permission denied' })
+    }
+
     const updatedBlog = await Blog.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
