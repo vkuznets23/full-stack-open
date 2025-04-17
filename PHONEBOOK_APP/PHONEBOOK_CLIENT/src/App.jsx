@@ -19,9 +19,15 @@ function App() {
   const [search, setSearch] = useState('')
 
   const fetchData = useCallback(async () => {
+    const cached = localStorage.getItem('contacts')
+    if (cached) {
+      setPersons(JSON.parse(cached))
+    }
+
     try {
       const data = await contactService.getAll()
       setPersons(data)
+      localStorage.setItem('contacts', JSON.stringify(data)) // add to localsotorage
       setIsLoading(false)
     } catch (error) {
       console.error('Failed to fetch contacts:', error)
@@ -53,7 +59,11 @@ function App() {
   const handleConfirm = async () => {
     try {
       await contactService.remove(contactToDelete)
-      setPersons(persons.filter((person) => person.id !== contactToDelete))
+      const updatedPersons = persons.filter(
+        (person) => person.id !== contactToDelete
+      )
+      setPersons(updatedPersons)
+      localStorage.setItem('contacts', JSON.stringify(updatedPersons)) //update localstorage
       toast.success(`contact deleted from the list`)
       setIsModalOpen(false)
     } catch (err) {

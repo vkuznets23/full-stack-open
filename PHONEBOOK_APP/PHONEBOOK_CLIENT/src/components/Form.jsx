@@ -95,7 +95,9 @@ const Form = ({ persons, setPersons }) => {
 
     try {
       const response = await contactService.create(formData)
-      setPersons((prevPersons) => [...prevPersons, response])
+      const updatedPersons = [...persons, response]
+      setPersons(updatedPersons)
+      localStorage.setItem('contacts', JSON.stringify(updatedPersons))
       toast.success(`contact ${name} added to the list`)
       resetForm()
     } catch (error) {
