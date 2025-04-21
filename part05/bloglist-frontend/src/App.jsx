@@ -86,6 +86,25 @@ const App = () => {
     }
   }
 
+  const handleDeleteNote = async (id) => {
+    try {
+      const confirmDelete = window.confirm(
+        'Are you sure you want to delete this blog?'
+      )
+      if (!confirmDelete) return
+
+      await blogService.remove(id)
+      setBlogs(blogs.filter((blog) => blog.id !== id))
+
+      setNotificationMessage('Blog deleted successfully')
+      setTimeout(() => setNotificationMessage(null), 4000)
+    } catch (err) {
+      console.error('Failed to delete blog:', error)
+      setErrorMessage('Failed to delete blog')
+      setTimeout(() => setErrorMessage(null), 4000)
+    }
+  }
+
   return (
     <div>
       {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
@@ -128,7 +147,7 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} handleDeleteNote={handleDeleteNote} />
         ))}
     </div>
   )
