@@ -19,7 +19,7 @@ router.get('/', async (_request, response, next) => {
 router.post('/', userExtractor, async (request, response, next) => {
   try {
     const body = request.body
-    if (!body.title || !body.url) {
+    if (!body.title || !body.url || !body.author) {
       return response.status(400).json({ error: 'title and url are required' })
     }
 
@@ -30,6 +30,7 @@ router.post('/', userExtractor, async (request, response, next) => {
 
     const blog = new Blog({
       title: body.title,
+      author: body.author,
       url: body.url,
       user: user.id,
     })

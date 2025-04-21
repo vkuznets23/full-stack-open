@@ -66,6 +66,7 @@ const App = () => {
 
       // we say hide to form
       createNewBlogRef.current.toggleVisibility()
+      console.log(`added ${title} by author ${author}`)
 
       const blog = {
         title,
@@ -107,7 +108,11 @@ const App = () => {
             <p>{user.name ? user.name : 'You are '} logged in</p>
             <button onClick={logout}>logout</button>
           </div>
-          <Togglable buttonLabel="create blog" ref={createNewBlogRef}>
+          <Togglable
+            buttonLabelShow="create blog"
+            buttonLabelHide="cancel"
+            ref={createNewBlogRef}
+          >
             <CreateNewBlog
               title={title}
               setTitle={setTitle}
