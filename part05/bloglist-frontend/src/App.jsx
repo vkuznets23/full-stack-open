@@ -64,9 +64,8 @@ const App = () => {
         return
       }
 
-      // we say hide to form
+      // we hide form here after creating
       createNewBlogRef.current.toggleVisibility()
-      console.log(`added ${title} by author ${author}`)
 
       const blog = {
         title,
