@@ -78,7 +78,7 @@ Blog.propTypes = {
     id: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     name: PropTypes.string,
-  }).isRequired,
+  }),
   handleDeleteNote: PropTypes.func.isRequired,
 }
 

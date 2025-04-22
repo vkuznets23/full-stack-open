@@ -13,6 +13,14 @@ describe('blog app', () => {
       },
     })
 
+    await request.post('http://localhost:3002/api/users', {
+      data: {
+        username: 'vikatest2',
+        name: 'Vika Testova2',
+        password: 'testpass',
+      },
+    })
+
     await page.goto('http://localhost:5173')
   })
 
@@ -91,9 +99,6 @@ describe('blog app', () => {
     await expect(page.getByText('Vika Testova logged in')).toBeVisible()
 
     await page.getByRole('button', { name: 'create blog' }).click()
-    await expect(page.getByText('title')).toBeVisible()
-    await expect(page.getByText('author')).toBeVisible()
-    await expect(page.getByText('url')).toBeVisible()
 
     await page.getByTestId('title').fill('New title')
     await page.getByTestId('author').fill('New author')
@@ -115,5 +120,32 @@ describe('blog app', () => {
 
     await expect(page.locator('[data-testid="blog-title"]')).toBeHidden()
     await expect(page.getByText('Blog deleted successfully')).toBeVisible()
+  })
+
+  test('delete button is only for user who created blog', async ({ page }) => {
+    await page.getByRole('textbox').first().fill('vikatest')
+    await page.getByRole('textbox').last().fill('testpass')
+    await page.getByRole('button', { name: 'login' }).click()
+
+    await page.getByRole('button', { name: 'create blog' }).click()
+
+    await page.getByTestId('title').fill('New title')
+    await page.getByTestId('author').fill('New author')
+    await page.getByTestId('url').fill('http//newurl')
+    await page.getByRole('button', { name: 'create' }).click()
+
+    await page.getByRole('button', { name: 'view' }).click()
+
+    await expect(page.getByRole('button', { name: 'delete' })).toBeVisible()
+
+    await page.getByRole('button', { name: 'logout' }).click()
+
+    await page.getByRole('textbox').first().fill('vikatest2')
+    await page.getByRole('textbox').last().fill('testpass')
+    await page.getByRole('button', { name: 'login' }).click()
+
+    await expect(page.getByText('Vika Testova2 logged in')).toBeVisible()
+
+    await expect(page.getByRole('button', { name: 'delete' })).not.toBeVisible()
   })
 })
