@@ -17,6 +17,7 @@ const CreateNewBlog = ({
           <label htmlFor="title">title</label>
           <input
             id="title"
+            data-testid="title"
             type="text"
             value={title}
             name="Title"
@@ -27,6 +28,7 @@ const CreateNewBlog = ({
           <label htmlFor="author">author</label>
           <input
             id="author"
+            data-testid="author"
             type="text"
             value={author}
             name="Author"
@@ -37,6 +39,7 @@ const CreateNewBlog = ({
           <label htmlFor="url">url</label>
           <input
             id="url"
+            data-testid="url"
             type="text"
             value={url}
             name="Url"

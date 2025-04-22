@@ -11,7 +11,7 @@ const Blog = ({ blog, handleDeleteNote }) => {
       const updatedBlog = {
         ...blog,
         likes: likes + 1,
-        user: blog.user._id,
+        user: typeof blog.user === 'object' ? blog.user._id : blog.user,
       }
       const returnedBlog = await blogService.update(blog.id, updatedBlog)
       setLikes(returnedBlog.likes)
@@ -29,7 +29,9 @@ const Blog = ({ blog, handleDeleteNote }) => {
   }
   return (
     <div style={blogStyle}>
-      <h3 style={{ margin: '2px 0' }}>{blog.title} </h3>
+      <h3 data-testid="blog-title" style={{ margin: '2px 0' }}>
+        {blog.title}{' '}
+      </h3>
       <Togglable buttonLabelShow="view" buttonLabelHide="hide">
         <>
           <p style={{ margin: '2px 0' }}>url: {blog.url}</p>
@@ -57,10 +59,13 @@ Blog.propTypes = {
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
     likes: PropTypes.number.isRequired,
-    user: PropTypes.shape({
-      _id: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
-    }),
+    user: PropTypes.oneOfType([
+      PropTypes.string.isRequired,
+      PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        username: PropTypes.string.isRequired,
+      }).isRequired,
+    ]).isRequired,
   }).isRequired,
   handleDeleteNote: PropTypes.func.isRequired,
 }
