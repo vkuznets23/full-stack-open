@@ -11,7 +11,7 @@ const Blog = ({ blog, handleDeleteNote }) => {
       const updatedBlog = {
         ...blog,
         likes: likes + 1,
-        user: blog.user._id || blog.user,
+        user: blog.user._id,
       }
       const returnedBlog = await blogService.update(blog.id, updatedBlog)
       setLikes(returnedBlog.likes)
@@ -60,7 +60,7 @@ Blog.propTypes = {
     user: PropTypes.shape({
       _id: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
-    }).isRequired,
+    }),
   }).isRequired,
   handleDeleteNote: PropTypes.func.isRequired,
 }

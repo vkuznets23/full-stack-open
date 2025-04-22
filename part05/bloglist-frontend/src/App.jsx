@@ -111,7 +111,6 @@ const App = () => {
       {notificationMessage && (
         <div style={{ color: 'green' }}>{notificationMessage}</div>
       )}
-      <h2>blogs</h2>
       {!user ? (
         <LoginForm
           handleLogin={handleLogin}
