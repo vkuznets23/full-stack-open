@@ -51,7 +51,17 @@ const Blog = ({ blog, handleDeleteNote }) => {
 }
 
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
+  blog: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    likes: PropTypes.number.isRequired,
+    user: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   handleDeleteNote: PropTypes.func.isRequired,
 }
 
