@@ -14,8 +14,9 @@ const CreateNewBlog = ({
       <h2>create new</h2>
       <form onSubmit={handleCreateNote}>
         <div>
-          title
+          <label htmlFor="title">title</label>
           <input
+            id="title"
             type="text"
             value={title}
             name="Title"
@@ -23,8 +24,9 @@ const CreateNewBlog = ({
           />
         </div>
         <div>
-          author
+          <label htmlFor="author">author</label>
           <input
+            id="author"
             type="text"
             value={author}
             name="Author"
@@ -32,8 +34,9 @@ const CreateNewBlog = ({
           />
         </div>
         <div>
-          url
+          <label htmlFor="url">url</label>
           <input
+            id="url"
             type="text"
             value={url}
             name="Url"
