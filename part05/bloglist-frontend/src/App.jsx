@@ -73,7 +73,6 @@ const App = () => {
         url,
       }
       const createdBlog = await blogService.create(blog)
-      console.log(createdBlog)
 
       setNotificationMessage(`a new blog ${title} by ${author} added`)
       setTimeout(() => setNotificationMessage(null), 5000)
@@ -148,7 +147,12 @@ const App = () => {
       {blogs
         .sort((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog key={blog.id} blog={blog} handleDeleteNote={handleDeleteNote} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleDeleteNote={handleDeleteNote}
+            currentUser={user}
+          />
         ))}
     </div>
   )

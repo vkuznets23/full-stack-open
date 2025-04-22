@@ -3,7 +3,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, handleDeleteNote }) => {
+const Blog = ({ blog, handleDeleteNote, currentUser }) => {
   const [likes, setLikes] = useState(blog.likes)
 
   const increaseLike = async () => {
@@ -19,6 +19,11 @@ const Blog = ({ blog, handleDeleteNote }) => {
       console.error('Failed to update likes:', err)
     }
   }
+
+  // check for current user
+  const isOwner =
+    currentUser &&
+    (blog.user === currentUser.id || blog.user._id === currentUser.id)
 
   const blogStyle = {
     paddingTop: 10,
@@ -40,12 +45,14 @@ const Blog = ({ blog, handleDeleteNote }) => {
             <button onClick={increaseLike}>like</button>
           </div>
           <p style={{ margin: '2px 0' }}>Author: {blog.author}</p>
-          <button
-            style={{ color: 'red' }}
-            onClick={() => handleDeleteNote(blog.id)}
-          >
-            delete
-          </button>
+          {isOwner && (
+            <button
+              style={{ color: 'red' }}
+              onClick={() => handleDeleteNote(blog.id)}
+            >
+              delete
+            </button>
+          )}
         </>
       </Togglable>
     </div>
@@ -66,6 +73,11 @@ Blog.propTypes = {
         username: PropTypes.string.isRequired,
       }).isRequired,
     ]).isRequired,
+  }).isRequired,
+  currentUser: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    name: PropTypes.string,
   }).isRequired,
   handleDeleteNote: PropTypes.func.isRequired,
 }
