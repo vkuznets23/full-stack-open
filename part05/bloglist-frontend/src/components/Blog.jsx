@@ -3,7 +3,7 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, handleDeleteNote, currentUser }) => {
+const Blog = ({ blog, handleDeleteNote, currentUser, updateBlogs }) => {
   const [likes, setLikes] = useState(blog.likes)
 
   const increaseLike = async () => {
@@ -15,6 +15,7 @@ const Blog = ({ blog, handleDeleteNote, currentUser }) => {
       }
       const returnedBlog = await blogService.update(blog.id, updatedBlog)
       setLikes(returnedBlog.likes)
+      updateBlogs()
     } catch (err) {
       console.error('Failed to update likes:', err)
     }
@@ -33,7 +34,7 @@ const Blog = ({ blog, handleDeleteNote, currentUser }) => {
     marginBottom: 5,
   }
   return (
-    <div style={blogStyle}>
+    <div data-testid="blog" style={blogStyle}>
       <h3 data-testid="blog-title" style={{ margin: '2px 0' }}>
         {blog.title}{' '}
       </h3>

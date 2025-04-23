@@ -9,7 +9,7 @@ router.use(express.json())
 
 router.get('/', async (_request, response, next) => {
   try {
-    const blogs = await Blog.find({}).populate('user')
+    const blogs = await Blog.find({}).populate('user').sort({ likes: -1 })
     response.json(blogs)
   } catch (error) {
     next(error)
@@ -65,10 +65,10 @@ router.put('/:id', userExtractor, async (req, res, next) => {
   try {
     const id = req.params.id
 
-    const blog = await Blog.findById(id)
-    if (blog.user.toString() !== req.user.id) {
-      return res.status(403).json({ error: 'Permission denied' })
-    }
+    // const blog = await Blog.findById(id)
+    // if (blog.user.toString() !== req.user.id) {
+    //   return res.status(403).json({ error: 'Permission denied' })
+    // }
 
     const updatedBlog = await Blog.findByIdAndUpdate(id, req.body, {
       new: true,

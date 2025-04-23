@@ -17,8 +17,20 @@ const App = () => {
   const createNewBlogRef = useRef() //container that holds referense to togglable
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    const fetchBlogs = async () => {
+      const blogsFromServer = await blogService.getAll()
+      const sortedBlogs = blogsFromServer.sort((a, b) => b.likes - a.likes)
+      setBlogs(sortedBlogs)
+    }
+    fetchBlogs()
+    // blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
+
+  const updateBlogs = async () => {
+    const blogsFromServer = await blogService.getAll()
+    const sortedBlogs = blogsFromServer.sort((a, b) => b.likes - a.likes)
+    setBlogs(sortedBlogs)
+  }
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -144,16 +156,15 @@ const App = () => {
         </>
       )}
       <h2>Blogs</h2>
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            handleDeleteNote={handleDeleteNote}
-            currentUser={user}
-          />
-        ))}
+      {blogs.map((blog) => (
+        <Blog
+          key={blog.id}
+          blog={blog}
+          handleDeleteNote={handleDeleteNote}
+          currentUser={user}
+          updateBlogs={updateBlogs}
+        />
+      ))}
     </div>
   )
 }
