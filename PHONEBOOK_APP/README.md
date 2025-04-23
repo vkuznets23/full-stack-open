@@ -2,7 +2,7 @@
 
 The Phonebook App is a full-stack web application that I developed as part of the Full Stack Open course. This app provides a simple and efficient way to manage a personal phonebook, allowing users to store and delete contact information. The main functionality of the app includes adding contacts with specific fields like phone numbers and names, and optionally uploading profile photos for each contact.
 
-## Key Features:
+## 📝 Key Features:
 
 - **Contact Management:**
 
@@ -19,7 +19,7 @@ The Phonebook App is a full-stack web application that I developed as part of th
 * **Search Functionality:** A search bar allows users to filter contacts based on their name or other details.
 * **Testing:** The app includes automated tests to ensure that the core features work as expected.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Frontend:** React, JavaScript, react-toastify for notifications
 - **Backend:** Node.js (Express) for handling API requests and MongoDB
@@ -60,7 +60,7 @@ npm run dev
 
 The app will be available at server side: http://localhost:3001 and cleint side http://localhost:5173/
 
-## Testing
+## 🧪 Testing
 
 ### Server-Side Testing
 
