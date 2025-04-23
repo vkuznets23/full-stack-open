@@ -4,6 +4,7 @@ const Filter = ({ search, setSearch }) => {
   }
   return (
     <input
+      data-testid="search-input"
       placeholder="search contact by name or number"
       className="filter-container"
       name="filter"

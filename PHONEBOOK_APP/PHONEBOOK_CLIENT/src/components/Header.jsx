@@ -10,7 +10,11 @@ const Header = ({ title, persons, isToggled, setIsToggled }) => {
           Total {persons.length} contacts
         </p>
       </div>
-      <button className="add-button" onClick={() => setIsToggled(!isToggled)}>
+      <button
+        data-testid="toggle-button"
+        className="add-button"
+        onClick={() => setIsToggled(!isToggled)}
+      >
         {isToggled ? <IoCloseSharp /> : <MdAdd />}
       </button>
     </div>

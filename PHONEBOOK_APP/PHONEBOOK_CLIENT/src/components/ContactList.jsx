@@ -16,7 +16,11 @@ const ContactList = ({ persons, handleDelete }) => {
               <h3>{name}</h3>
               <p>{phone}</p>
             </div>
-            <button className="delete-button" onClick={() => handleDelete(id)}>
+            <button
+              data-testid="delete-button"
+              className="delete-button"
+              onClick={() => handleDelete(id)}
+            >
               <RiDeleteBin5Fill style={{ fontSize: '1.1rem' }} />
             </button>
           </div>

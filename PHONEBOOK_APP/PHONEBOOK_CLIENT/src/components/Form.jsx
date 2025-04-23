@@ -121,9 +121,10 @@ const Form = ({ persons, setPersons }) => {
         <div className="name-field">
           <label htmlFor="name">*Name</label>
           <input
+            id="name"
+            data-testid="name"
             className="field-input"
             name="name"
-            id="name"
             autoComplete="off"
             placeholder="Pekka Salmonen"
             value={formFields.name}
@@ -133,9 +134,10 @@ const Form = ({ persons, setPersons }) => {
         <div className="phone-field">
           <label htmlFor="phone">*Phone</label>
           <input
+            id="phone"
+            data-testid="phone"
             className="field-input"
             name="phone"
-            id="phone"
             autoComplete="off"
             placeholder="+358-40-123-4567"
             value={formFields.phone}

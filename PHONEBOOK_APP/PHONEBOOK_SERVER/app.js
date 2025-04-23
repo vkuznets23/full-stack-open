@@ -23,6 +23,10 @@ if (process.env.NODE_ENV !== 'test') {
 
 // Routes
 app.use('/api/persons', contactsRouter)
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
 
 mongoose
   .connect(config.MONGODB_URI)

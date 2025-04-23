@@ -10,7 +10,6 @@ The Phonebook App is a full-stack web application that I developed as part of th
   - The phone number input includes a masking feature to ensure proper format (+XXX-XX-XXX-XXXX), making it easier for users to add valid numbers.
 
 - **Validation:**
-  - **Name validation:** Ensures that each contact has a name, and it enforces a restriction that the name must contain more than three characters.
   - **Phone number validation:** Users are required to provide a valid phone number, and it must follow the defined format for consistency.
 - **Photo Upload:**
   - Users have the option to upload a photo for each contact. This helps to visually associate each contact with a picture, enhancing the user experience.
@@ -26,9 +25,7 @@ The Phonebook App is a full-stack web application that I developed as part of th
 - **Backend:** Node.js (Express) for handling API requests and MongoDB
 - **Testing:** React Testing Library, Playwright for end-to-end tests
 
-## Setup
-
-### Installation
+## Installation
 
 1. Clone the repository:
 
@@ -63,6 +60,8 @@ npm run dev
 
 The app will be available at server side: http://localhost:3001 and cleint side http://localhost:5173/
 
+## Testing
+
 ### Server-Side Testing
 
 The Phonebook app includes automated tests to ensure the functionality of the backend API. These tests focus on the CRUD operations (Create, Read, Update, Delete) and data validation for the contacts management system. The tests are designed to check that the backend behaves as expected under various scenarios
@@ -81,6 +80,33 @@ The Phonebook app includes automated tests to ensure the functionality of the ba
 
 These tests are run using the Node.js testing framework, and the test environment is configured to run under NODE_ENV=test to isolate test data from production data. To run the tests, use the following command:
 
+**📦 How to Run Tests**
+
 ```Bash
 npm test
+```
+
+### E2E Testing
+
+**📦 How to Run Tests**
+
+go to the server side and start test environment:
+
+```Bash
+cd PHONEBOOK_SERVER
+npm run start:test
+```
+
+go to the client side and start:
+
+```Bash
+cd PHONEBOOK_CLIENT
+npm run dev
+```
+
+go to the E2E tests:
+
+```Bash
+cd E2ETests
+npm run test -- --ui
 ```
