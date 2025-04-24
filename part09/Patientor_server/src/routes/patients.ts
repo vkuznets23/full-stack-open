@@ -2,6 +2,7 @@ import express, { Response } from 'express'
 import patientServices from '../services/patientsServices'
 import { NonSensitivePatient } from '../types/patients'
 import toNewPatient from '../utils'
+import { z } from 'zod'
 
 const router = express.Router()
 
@@ -21,11 +22,11 @@ router.post('/', (req, res: Response) => {
     const addedPatient = patientServices.addPatient(newPatient)
     res.json(addedPatient)
   } catch (error: unknown) {
-    let errorMessage = 'Something went wrong.'
-    if (error instanceof Error) {
-      errorMessage += ` Error: ${error.message}`
+    if (error instanceof z.ZodError) {
+      res.status(400).send({ error: error.issues })
+    } else {
+      res.status(400).send({ error: 'unknown error' })
     }
-    res.status(400).send(errorMessage)
   }
 })
 
