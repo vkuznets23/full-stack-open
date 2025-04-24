@@ -1,5 +1,5 @@
 import { CoursePart } from '../types/CoursePart'
-import Course from './Course'
+import Part from './Part'
 
 interface ContentProps {
   courseParts: CoursePart[]
@@ -8,8 +8,8 @@ interface ContentProps {
 const Content = ({ courseParts }: ContentProps) => {
   return (
     <>
-      {courseParts.map(({ name, exerciseCount }) => {
-        return <Course key={name} name={name} exerciseCount={exerciseCount} />
+      {courseParts.map((part, index) => {
+        return <Part key={index} part={part} />
       })}
     </>
   )
