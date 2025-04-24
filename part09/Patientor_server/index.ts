@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import diagnosesRouter from './src/routes/diagnosies'
 import patientsRouter from './src/routes/patients'
+import { errorMiddleware } from './src/middleware/errorMiddleware'
 
 const app = express()
 app.use(cors())
@@ -16,6 +17,8 @@ app.get('/api/ping', (_req, res) => {
 
 app.use('/api/diagnoses', diagnosesRouter)
 app.use('/api/patients', patientsRouter)
+
+app.use(errorMiddleware)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

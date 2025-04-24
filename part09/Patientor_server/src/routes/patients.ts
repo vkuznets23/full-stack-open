@@ -1,8 +1,7 @@
 import express, { Response } from 'express'
 import patientServices from '../services/patientsServices'
 import { NonSensitivePatient } from '../types/patients'
-import toNewPatient from '../utils'
-import { z } from 'zod'
+import { newPatientParser } from '../middleware/newPatientparser'
 
 const router = express.Router()
 
@@ -16,18 +15,9 @@ router.get('/:id', (req, res) => {
   else res.sendStatus(404)
 })
 
-router.post('/', (req, res: Response) => {
-  try {
-    const newPatient = toNewPatient(req.body) //validation
-    const addedPatient = patientServices.addPatient(newPatient)
-    res.json(addedPatient)
-  } catch (error: unknown) {
-    if (error instanceof z.ZodError) {
-      res.status(400).send({ error: error.issues })
-    } else {
-      res.status(400).send({ error: 'unknown error' })
-    }
-  }
+router.post('/', newPatientParser, (req, res: Response) => {
+  const addedPatient = patientServices.addPatient(req.body)
+  res.json(addedPatient)
 })
 
 export default router
