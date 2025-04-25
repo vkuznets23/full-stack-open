@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import contactService from './services/service'
 import { toast, ToastContainer } from 'react-toastify'
 import {
@@ -38,10 +38,14 @@ function App() {
   }, [])
 
   useEffect(() => {
+    console.log('fetching')
     fetchData()
   }, [fetchData])
 
-  const getFilteredContacts = () => {
+  const getFilteredContacts = useMemo(() => {
+    if (persons.length === 0) return []
+
+    console.log('filtered')
     const searchLower = search.toLowerCase()
 
     return persons.filter((contact) => {
@@ -50,7 +54,7 @@ function App() {
         contact.phone.includes(search)
       )
     })
-  }
+  }, [search, persons])
 
   const handleDelete = (id) => {
     setContactToDelete(id)
@@ -111,7 +115,7 @@ function App() {
           <p style={{ marginTop: 20 }}>No contacts found</p>
         ) : (
           <ContactList
-            persons={getFilteredContacts()}
+            persons={getFilteredContacts}
             handleDelete={handleDelete}
           />
         )}
