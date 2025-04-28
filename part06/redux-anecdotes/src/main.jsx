@@ -1,10 +1,7 @@
-import ReactDOM from 'react-dom/client'
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
+import ReactDOM from 'react-dom'
 import App from './App'
-import reducer from './reducers/combinedReducer'
-
-const store = createStore(reducer)
+import { Provider } from 'react-redux'
+import { store } from './STORE'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>

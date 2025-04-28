@@ -1,7 +1,5 @@
-// import { useSelector } from 'react-redux'
-
 // eslint-disable-next-line react/prop-types
-const AnecdoteList = ({ sortedAnecdotes, vote }) => {
+const AnecdoteList = ({ sortedAnecdotes, handleVoteClick }) => {
   return (
     <div>
       <h2>Anecdotes</h2>
@@ -11,7 +9,7 @@ const AnecdoteList = ({ sortedAnecdotes, vote }) => {
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
+            <button onClick={() => handleVoteClick(anecdote)}>vote</button>
           </div>
         </div>
       ))}
