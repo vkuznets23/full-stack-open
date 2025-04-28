@@ -1,11 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addAnecdote, increaseVote } from './features/anecdoteSlice'
+import {
+  addAnecdote,
+  increaseVote,
+  setAnecdotes,
+} from './features/anecdoteSlice'
 import { AnecdoteForm, AnecdoteList, Filter, Notification } from './components'
 import {
   clearNotification,
   setNotification,
 } from './features/notificationReducer'
+import anecdotesService from './services/anecdotes'
 
 const App = () => {
   const [anecdote, setAnecdote] = useState('')
@@ -13,6 +18,13 @@ const App = () => {
   const filter = useSelector((state) => state.filter.filter)
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    anecdotesService
+      .getAll()
+      .then((anecdotes) => dispatch(setAnecdotes(anecdotes)))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
   const filteredAnecdotes = sortedAnecdotes.filter((anecdote) =>
@@ -25,16 +37,18 @@ const App = () => {
     dispatch(increaseVote({ id }))
   }
 
-  const handleSubmitForm = (e) => {
+  const handleSubmitForm = async (e) => {
     e.preventDefault()
     if (anecdote.trim() !== '') {
-      dispatch(addAnecdote({ content: anecdote }))
+      const newAnecdote = await anecdotesService.createNew(anecdote)
+      dispatch(addAnecdote(newAnecdote))
       setAnecdote('')
+
+      dispatch(setNotification('New anecdote added!'))
+      setTimeout(() => {
+        dispatch(clearNotification())
+      }, 5000)
     }
-    dispatch(setNotification('New anecdote added!'))
-    setTimeout(() => {
-      dispatch(clearNotification())
-    }, 5000)
   }
 
   const handleVoteClick = (anecdote) => {
