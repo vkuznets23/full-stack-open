@@ -1,17 +1,21 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addAnecdote, increaseVote } from './reducers/anecdoteReducer'
-import AnecdoteForm from './components/AnecdoteForm'
-import AnecdoteList from './components/AnecdoteList'
+import { AnecdoteForm, AnecdoteList, Filter } from './components'
 
 const App = () => {
   const [anecdote, setAnecdote] = useState('')
-  const anecdotes = useSelector((state) => state)
-  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
+  const anecdotes = useSelector((state) => state.anecdotes)
+  const filter = useSelector((state) => state.filter)
   const dispatch = useDispatch()
 
+  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
+  const filteredAnecdotes = sortedAnecdotes.filter((anecdote) =>
+    anecdote.content.toLowerCase().includes(filter.toLowerCase())
+  )
+
   const vote = (id) => {
-    console.log('vote', id)
+    // console.log('vote', id)
     dispatch(increaseVote(id))
   }
 
@@ -25,7 +29,8 @@ const App = () => {
 
   return (
     <div>
-      <AnecdoteList sortedAnecdotes={sortedAnecdotes} vote={vote} />
+      <Filter />
+      <AnecdoteList sortedAnecdotes={filteredAnecdotes} vote={vote} />
       <AnecdoteForm
         handleSubmitForm={handleSubmitForm}
         anecdote={anecdote}

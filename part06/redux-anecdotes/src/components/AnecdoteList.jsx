@@ -1,3 +1,5 @@
+// import { useSelector } from 'react-redux'
+
 // eslint-disable-next-line react/prop-types
 const AnecdoteList = ({ sortedAnecdotes, vote }) => {
   return (
