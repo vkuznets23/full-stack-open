@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
-  addAnecdote,
-  increaseVote,
-  setAnecdotes,
+  createAnecdote,
+  initializeAnecdotes,
+  voteAnecdote,
 } from './features/anecdoteSlice'
 import { AnecdoteForm, AnecdoteList, Filter, Notification } from './components'
-import {
-  clearNotification,
-  setNotification,
-} from './features/notificationReducer'
-import anecdotesService from './services/anecdotes'
+import { setNotificationTimer } from './features/notificationReducer'
 
 const App = () => {
   const [anecdote, setAnecdote] = useState('')
@@ -20,11 +16,8 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    anecdotesService
-      .getAll()
-      .then((anecdotes) => dispatch(setAnecdotes(anecdotes)))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    dispatch(initializeAnecdotes())
+  }, [dispatch])
 
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
   const filteredAnecdotes = sortedAnecdotes.filter((anecdote) =>
@@ -33,30 +26,19 @@ const App = () => {
       : true
   )
 
-  const vote = (id) => {
-    dispatch(increaseVote({ id }))
-  }
-
   const handleSubmitForm = async (e) => {
     e.preventDefault()
     if (anecdote.trim() !== '') {
-      const newAnecdote = await anecdotesService.createNew(anecdote)
-      dispatch(addAnecdote(newAnecdote))
+      dispatch(createAnecdote(anecdote))
       setAnecdote('')
 
-      dispatch(setNotification('New anecdote added!'))
-      setTimeout(() => {
-        dispatch(clearNotification())
-      }, 5000)
+      dispatch(setNotificationTimer(`New anecdote added!`, 5))
     }
   }
 
   const handleVoteClick = (anecdote) => {
-    vote(anecdote.id)
-    dispatch(setNotification(`You voted for '${anecdote.content}'`))
-    setTimeout(() => {
-      dispatch(clearNotification())
-    }, 5000)
+    dispatch(voteAnecdote(anecdote))
+    dispatch(setNotificationTimer(`You voted for '${anecdote.content}'`, 5))
   }
 
   return (
