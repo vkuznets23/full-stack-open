@@ -4,13 +4,19 @@ import { useContext } from 'react'
 import MyContext from '../context'
 
 const AnecdoteForm = () => {
-  const queryClient = useQueryClient()
   const { dispatch } = useContext(MyContext)
+  const queryClient = useQueryClient()
 
   const newAnecdoteMutation = useMutation({
     mutationFn: createAnecdote,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] })
+    },
+    onError: (error) => {
+      dispatch({
+        type: 'errorNotification',
+        content: 'Error creating anecdote!',
+      })
     },
   })
 
@@ -18,6 +24,17 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
+
+    if (content.length < 5) {
+      dispatch({
+        type: 'errorNotification',
+        content: 'Content must be at least 5 characters long!',
+      })
+      setTimeout(() => {
+        dispatch({ type: 'clearNotification' })
+      }, 3000)
+      return
+    }
     newAnecdoteMutation.mutate({ content, vote: 0 })
     dispatch({
       type: 'addAnecdote',

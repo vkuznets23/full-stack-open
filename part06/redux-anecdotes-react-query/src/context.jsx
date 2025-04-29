@@ -12,6 +12,8 @@ const reducer = (state, action) => {
       return { notification: `You voted for "${action.content}" anecdote` }
     case 'clearNotification':
       return { notification: '' }
+    case 'errorNotification':
+      return { notification: action.content || `Error!` }
     default:
       return state
   }
