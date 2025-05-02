@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const CreateNew = ({ addNew }) => {
+// eslint-disable-next-line react/prop-types
+const CreateNew = ({ addNew, setNotification }) => {
+  const navigate = useNavigate()
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
@@ -13,6 +16,9 @@ const CreateNew = ({ addNew }) => {
       info,
       votes: 0,
     })
+    navigate('/')
+    setNotification(`A new anecdote ${content} created!`)
+    setTimeout(() => setNotification(''), 5000)
   }
 
   return (

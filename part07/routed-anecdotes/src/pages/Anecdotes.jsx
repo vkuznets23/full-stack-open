@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 // eslint-disable-next-line react/prop-types
 const AnecdoteList = ({ anecdotes }) => (
   <div>
@@ -5,7 +7,9 @@ const AnecdoteList = ({ anecdotes }) => (
     <ul>
       {/* eslint-disable-next-line react/prop-types */}
       {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>{anecdote.content}</li>
+        <li key={anecdote.id}>
+          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+        </li>
       ))}
     </ul>
   </div>

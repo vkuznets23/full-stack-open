@@ -6,6 +6,7 @@ import Footer from './components/footer'
 import { anecdotes as anecdotesList } from './anecdotes'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import CreateNew from './pages/CreateAnecdote'
+import Anecdote from './pages/Anecdote'
 
 const App = () => {
   const [anecdotes, setAnecdotes] = useState(anecdotesList)
@@ -45,10 +46,20 @@ const App = () => {
       <Link style={padding} to="/create">
         create new
       </Link>
+      <p>{notification}</p>
       <Routes>
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
+        <Route
+          path="/anecdotes/:id"
+          element={<Anecdote anecdotes={anecdotes} />}
+        />
         <Route path="/about" element={<About />} />
-        <Route path="/create" element={<CreateNew addNew={addNew} />} />
+        <Route
+          path="/create"
+          element={
+            <CreateNew addNew={addNew} setNotification={setNotification} />
+          }
+        />
       </Routes>
       <Footer />
     </Router>
