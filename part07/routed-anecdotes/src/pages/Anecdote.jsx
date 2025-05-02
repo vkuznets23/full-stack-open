@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom'
 
 // eslint-disable-next-line react/prop-types
-const Anecdote = ({ anecdotes }) => {
+const Anecdote = ({ anecdotes, vote }) => {
   const { id } = useParams() //its a string
   // eslint-disable-next-line react/prop-types
   const anecdote = anecdotes.find((a) => a.id === Number(id))
@@ -19,6 +19,7 @@ const Anecdote = ({ anecdotes }) => {
           {anecdote.info}
         </a>
       </p>
+      <button onClick={() => vote(anecdote.id)}>vote</button>
     </div>
   )
 }
