@@ -8,6 +8,7 @@ import {
   fetchBlogs as initilizeBlogs,
   createBlog,
   deleteBlog,
+  likeBlog,
 } from "./slices/blogs";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -16,6 +17,7 @@ import Home from "./pages/Home";
 import Users from "./pages/Users";
 import User from "./components/User";
 import usersService from "./services/users";
+import SingleBlog from "./components/SingleBlog";
 
 const App = () => {
   const [users, setUsers] = useState([]);
@@ -117,6 +119,10 @@ const App = () => {
     }
   };
 
+  const handleLikeClick = (blog) => {
+    dispatch(likeBlog(blog));
+  };
+
   const handleDeleteNote = async (id) => {
     try {
       const confirmDelete = window.confirm(
@@ -169,6 +175,7 @@ const App = () => {
               createNewBlogRef={createNewBlogRef}
               handleCreateNote={handleCreateNote}
               handleDeleteNote={handleDeleteNote}
+              handleLikeClick={handleLikeClick}
               user={user}
               title={title}
               setTitle={setTitle}
@@ -179,7 +186,12 @@ const App = () => {
             />
           }
         />
-        {/* <Route path="/blogs/:id" element={<Blog />} /> */}
+        <Route
+          path="/blogs/:id"
+          element={
+            <SingleBlog blogs={blogs} handleLikeClick={handleLikeClick} />
+          }
+        />
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User users={users} />} />
       </Routes>

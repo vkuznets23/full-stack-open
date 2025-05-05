@@ -5,6 +5,7 @@ const Home = ({
   createNewBlogRef,
   handleCreateNote,
   handleDeleteNote,
+  handleLikeClick,
   user,
   title,
   setTitle,
@@ -36,6 +37,7 @@ const Home = ({
         blog={blog}
         handleDeleteNote={handleDeleteNote}
         currentUser={user}
+        handleLikeClick={handleLikeClick}
       />
     ))}
   </div>
