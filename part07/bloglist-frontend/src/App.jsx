@@ -1,143 +1,152 @@
-import { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { LoginForm, Blog } from "./components";
-import { setNotificationTimer } from "./slices/notification";
-import { setErrorTimer } from "./slices/errorNotification";
-import {
-  fetchBlogs as initilizeBlogs,
-  createBlog,
-  deleteBlog,
-  likeBlog,
-} from "./slices/blogs";
-import blogService from "./services/blogs";
-import loginService from "./services/login";
-import { removeUser, setUser } from "./slices/user";
-import Home from "./pages/Home";
-import Users from "./pages/Users";
-import User from "./components/User";
-import usersService from "./services/users";
-import SingleBlog from "./components/SingleBlog";
+import { useState, useEffect, useRef } from 'react'
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { LoginForm, Blog } from './components'
+import { setNotificationTimer } from './slices/notification'
+import { setErrorTimer } from './slices/errorNotification'
+import { fetchBlogs as initilizeBlogs, createBlog, deleteBlog, likeBlog } from './slices/blogs'
+import blogService from './services/blogs'
+import loginService from './services/login'
+import { removeUser, setUser } from './slices/user'
+import Home from './pages/Home'
+import Users from './pages/Users'
+import User from './components/User'
+import usersService from './services/users'
+import SingleBlog from './components/SingleBlog'
 
 const App = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState([])
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
-  const dispatch = useDispatch();
-  const createNewBlogRef = useRef(); //container that holds referense to togglable
-  const notification = useSelector((state) => state.notification.msg);
-  const error = useSelector((state) => state.error.msg);
-  const blogs = useSelector((state) => state.blogs.blogs) || [];
-  const user = useSelector((state) => state.user.user);
-
-  useEffect(() => {
-    dispatch(initilizeBlogs());
-  }, [dispatch]);
+  const dispatch = useDispatch()
+  const createNewBlogRef = useRef() //container that holds referense to togglable
+  const notification = useSelector((state) => state.notification.msg)
+  const error = useSelector((state) => state.error.msg)
+  const blogs = useSelector((state) => state.blogs.blogs) || []
+  const user = useSelector((state) => state.user.user)
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+    dispatch(initilizeBlogs())
+  }, [dispatch])
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
+      const user = JSON.parse(loggedUserJSON)
 
-      dispatch(setUser(user));
-      blogService.setToken(user.token);
+      dispatch(setUser(user))
+      blogService.setToken(user.token)
     }
-  }, []);
+  }, [])
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const resp = await usersService.getAllUsers();
-        setUsers(resp);
+        const resp = await usersService.getAllUsers()
+        setUsers(resp)
       } catch (error) {
-        console.error("Failed to fetch users:", error);
+        console.error('Failed to fetch users:', error)
       }
-    };
-    fetchUsers();
-  }, []);
+    }
+    fetchUsers()
+  }, [])
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     try {
       const user = await loginService.login({
         username,
         password,
-      });
+      })
 
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      dispatch(setUser(user));
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      dispatch(setUser(user))
 
-      setUsername("");
-      setPassword("");
+      setUsername('')
+      setPassword('')
     } catch (exception) {
-      console.log(exception);
-      dispatch(setErrorTimer("Wrong credentials", 5));
+      console.log(exception)
+      dispatch(setErrorTimer('Wrong credentials', 5))
     }
-  };
+  }
 
   const logout = () => {
-    window.localStorage.removeItem("loggedBlogappUser");
-    dispatch(removeUser());
-  };
+    window.localStorage.removeItem('loggedBlogappUser')
+    dispatch(removeUser())
+  }
 
   const handleCreateNote = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       if (!title || !author || !url) {
-        dispatch(setErrorTimer("Please fill in all fields", 5));
-        return;
+        dispatch(setErrorTimer('Please fill in all fields', 5))
+        return
       }
 
       // we hide form here after creating
-      createNewBlogRef.current.toggleVisibility();
+      createNewBlogRef.current.toggleVisibility()
 
       const blog = {
         title,
         author,
         url,
-      };
-      await dispatch(createBlog(blog));
+      }
+      await dispatch(createBlog(blog))
 
-      dispatch(
-        setNotificationTimer(`a new blog ${title} by ${author} added`, 5),
-      );
+      dispatch(setNotificationTimer(`a new blog ${title} by ${author} added`, 5))
 
-      setTitle("");
-      setAuthor("");
-      setUrl("");
+      setTitle('')
+      setAuthor('')
+      setUrl('')
     } catch (err) {
-      console.log(err);
-      dispatch(setErrorTimer("Failed to create blog", 5));
+      console.log(err)
+      dispatch(setErrorTimer('Failed to create blog', 5))
     }
-  };
+  }
 
   const handleLikeClick = (blog) => {
-    dispatch(likeBlog(blog));
-  };
+    dispatch(likeBlog(blog))
+  }
 
   const handleDeleteNote = async (id) => {
     try {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to delete this blog?",
-      );
-      if (!confirmDelete) return;
-      await dispatch(deleteBlog(id));
+      const confirmDelete = window.confirm('Are you sure you want to delete this blog?')
+      if (!confirmDelete) return
+      await dispatch(deleteBlog(id))
 
-      dispatch(setNotificationTimer("Blog deleted successfully", 5));
+      dispatch(setNotificationTimer('Blog deleted successfully', 5))
     } catch (err) {
-      console.error("Failed to delete blog:", err);
+      console.error('Failed to delete blog:', err)
 
-      dispatch(setErrorTimer("Failed to delete blog", 5));
+      dispatch(setErrorTimer('Failed to delete blog', 5))
     }
-  };
+  }
+
+  const handleCreateComment = async (blogId, commentText) => {
+    if (!commentText || commentText.trim().length === 0) {
+      dispatch(setErrorTimer('Add a valid comment', 5))
+      return
+    }
+    try {
+      const updatedBlog = await blogService.createComment(blogId, {
+        content: commentText,
+      })
+
+      dispatch(initilizeBlogs())
+      dispatch(setNotificationTimer('Comment added', 5))
+    } catch (err) {
+      console.error('Failed to add comment:', err)
+      dispatch(setErrorTimer('Failed to add comment', 5))
+    }
+  }
 
   if (!user) {
     return (
@@ -148,21 +157,21 @@ const App = () => {
         password={password}
         setPassword={setPassword}
       />
-    );
+    )
   }
 
   return (
     <Router>
       <nav>
         <Link to="/">blogs</Link>
-        {" | "}
+        {' | '}
         <Link to="/users">users</Link>
-        {" | "}
+        {' | '}
         {user.name} logged in <button onClick={logout}>logout</button>
       </nav>
       <div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
-        {notification && <div style={{ color: "green" }}>{notification}</div>}
+        {error && <div style={{ color: 'red' }}>{error}</div>}
+        {notification && <div style={{ color: 'green' }}>{notification}</div>}
       </div>
       <h1>Blogs app</h1>
 
@@ -189,14 +198,18 @@ const App = () => {
         <Route
           path="/blogs/:id"
           element={
-            <SingleBlog blogs={blogs} handleLikeClick={handleLikeClick} />
+            <SingleBlog
+              blogs={blogs}
+              handleLikeClick={handleLikeClick}
+              handleCreateComment={handleCreateComment}
+            />
           }
         />
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User users={users} />} />
       </Routes>
     </Router>
-  );
-};
+  )
+}
 
-export default App;
+export default App
