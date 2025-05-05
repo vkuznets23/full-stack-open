@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { CreateNewBlog, LoginForm, Blog, Togglable } from "./components";
+import { LoginForm } from "./components";
 import { setNotificationTimer } from "./slices/notification";
 import { setErrorTimer } from "./slices/errorNotification";
 import {
@@ -11,6 +12,8 @@ import {
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import { removeUser, setUser } from "./slices/user";
+import Home from "./pages/Home";
+import Users from "./pages/Users";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -114,52 +117,55 @@ const App = () => {
     }
   };
 
-  return (
-    <div>
-      {error && <div style={{ color: "red" }}>{error}</div>}
-      {notification && <div style={{ color: "green" }}>{notification}</div>}
+  if (!user) {
+    return (
+      <LoginForm
+        handleLogin={handleLogin}
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+      />
+    );
+  }
 
-      {!user ? (
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-        />
-      ) : (
-        <>
-          <div>
-            <p>{user.name ? user.name : "You are "} logged in</p>
-            <button onClick={logout}>logout</button>
-          </div>
-          <Togglable
-            buttonLabelShow="create blog"
-            buttonLabelHide="cancel"
-            ref={createNewBlogRef}
-          >
-            <CreateNewBlog
+  return (
+    <Router>
+      <nav>
+        <Link to="/">blogs</Link>
+        {" | "}
+        <Link to="/users">users</Link>
+        {" | "}
+        {user.name} logged in <button onClick={logout}>logout</button>
+      </nav>
+      <div>
+        {error && <div style={{ color: "red" }}>{error}</div>}
+        {notification && <div style={{ color: "green" }}>{notification}</div>}
+      </div>
+      <h1>Blogs app</h1>
+
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              blogs={blogs}
+              createNewBlogRef={createNewBlogRef}
+              handleCreateNote={handleCreateNote}
+              handleDeleteNote={handleDeleteNote}
+              user={user}
               title={title}
               setTitle={setTitle}
               author={author}
               setAuthor={setAuthor}
               url={url}
               setUrl={setUrl}
-              handleCreateNote={handleCreateNote}
             />
-          </Togglable>
-        </>
-      )}
-      <h2>Blogs</h2>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleDeleteNote={handleDeleteNote}
-          currentUser={user}
+          }
         />
-      ))}
-    </div>
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </Router>
   );
 };
 
