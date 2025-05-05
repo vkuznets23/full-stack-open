@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { LoginForm } from "./components";
+import { LoginForm, Blog } from "./components";
 import { setNotificationTimer } from "./slices/notification";
 import { setErrorTimer } from "./slices/errorNotification";
 import {
@@ -179,6 +179,7 @@ const App = () => {
             />
           }
         />
+        {/* <Route path="/blogs/:id" element={<Blog />} /> */}
         <Route path="/users" element={<Users users={users} />} />
         <Route path="/users/:id" element={<User users={users} />} />
       </Routes>

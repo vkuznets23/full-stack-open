@@ -1,6 +1,4 @@
 import Togglable from "./Togglable";
-import { useState } from "react";
-import blogService from "../services/blogs";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog } from "../slices/blogs";
