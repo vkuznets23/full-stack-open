@@ -14,8 +14,12 @@ import loginService from "./services/login";
 import { removeUser, setUser } from "./slices/user";
 import Home from "./pages/Home";
 import Users from "./pages/Users";
+import User from "./components/User";
+import usersService from "./services/users";
 
 const App = () => {
+  const [users, setUsers] = useState([]);
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -42,6 +46,18 @@ const App = () => {
       dispatch(setUser(user));
       blogService.setToken(user.token);
     }
+  }, []);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const resp = await usersService.getAllUsers();
+        setUsers(resp);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    };
+    fetchUsers();
   }, []);
 
   const handleLogin = async (e) => {
@@ -163,7 +179,8 @@ const App = () => {
             />
           }
         />
-        <Route path="/users" element={<Users />} />
+        <Route path="/users" element={<Users users={users} />} />
+        <Route path="/users/:id" element={<User users={users} />} />
       </Routes>
     </Router>
   );

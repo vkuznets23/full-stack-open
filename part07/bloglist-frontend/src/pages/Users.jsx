@@ -1,19 +1,6 @@
-import { useEffect, useState } from "react";
-import usersService from "../services/users";
+import { Link } from "react-router-dom";
 
-const Users = () => {
-  const [users, setUsers] = useState([]);
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const resp = await usersService.getAllUsers();
-        setUsers(resp);
-      } catch (error) {
-        console.error("Failed to fetch users:", error);
-      }
-    };
-    fetchUsers();
-  }, []);
+const Users = ({ users }) => {
   return (
     <div>
       <h2>Users</h2>
@@ -27,7 +14,9 @@ const Users = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user._id}>
-              <td>{user.username}</td>
+              <td>
+                <Link to={`/users/${user._id}`}>{user.username}</Link>
+              </td>
               <td>{user.blogs ? user.blogs.length : 0}</td>
             </tr>
           ))}
