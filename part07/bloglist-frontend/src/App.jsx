@@ -10,6 +10,7 @@ import {
 } from "./slices/blogs";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import { removeUser, setUser } from "./slices/user";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -19,13 +20,12 @@ const App = () => {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
-  const [user, setUser] = useState(null);
-
   const dispatch = useDispatch();
   const createNewBlogRef = useRef(); //container that holds referense to togglable
   const notification = useSelector((state) => state.notification.msg);
   const error = useSelector((state) => state.error.msg);
   const blogs = useSelector((state) => state.blogs.blogs) || [];
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     dispatch(initilizeBlogs());
@@ -35,7 +35,8 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+
+      dispatch(setUser(user));
       blogService.setToken(user.token);
     }
   }, []);
@@ -50,7 +51,8 @@ const App = () => {
 
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
-      setUser(user);
+      dispatch(setUser(user));
+
       setUsername("");
       setPassword("");
     } catch (exception) {
@@ -61,7 +63,7 @@ const App = () => {
 
   const logout = () => {
     window.localStorage.removeItem("loggedBlogappUser");
-    setUser(null);
+    dispatch(removeUser());
   };
 
   const handleCreateNote = async (e) => {
@@ -92,8 +94,7 @@ const App = () => {
       setUrl("");
     } catch (err) {
       console.log(err);
-
-      dispatch(setErrorTimer("Wrong credentials", 5));
+      dispatch(setErrorTimer("Failed to create blog", 5));
     }
   };
 
@@ -107,7 +108,7 @@ const App = () => {
 
       dispatch(setNotificationTimer("Blog deleted successfully", 5));
     } catch (err) {
-      console.error("Failed to delete blog:", error);
+      console.error("Failed to delete blog:", err);
 
       dispatch(setErrorTimer("Failed to delete blog", 5));
     }
