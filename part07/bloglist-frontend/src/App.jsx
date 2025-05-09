@@ -13,6 +13,7 @@ import Users from './pages/Users'
 import User from './components/User'
 import usersService from './services/users'
 import SingleBlog from './components/SingleBlog'
+import { AppBar, Toolbar, Typography, Button, Container, Alert, Box } from '@mui/material'
 
 const App = () => {
   const [users, setUsers] = useState([])
@@ -162,52 +163,71 @@ const App = () => {
 
   return (
     <Router>
-      <nav>
-        <Link to="/">blogs</Link>
-        {' | '}
-        <Link to="/users">users</Link>
-        {' | '}
-        {user.name} logged in <button onClick={logout}>logout</button>
-      </nav>
-      <div>
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-        {notification && <div style={{ color: 'green' }}>{notification}</div>}
-      </div>
-      <h1>Blogs app</h1>
+      <AppBar position="static">
+        <Toolbar sx={{ gap: 2 }}>
+          <Button color="inherit" component={Link} to="/">
+            Blogs
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            Users
+          </Button>
+          <Typography sx={{ flexGrow: 1 }}>{user.name} logged in</Typography>
+          <Button color="inherit" onClick={logout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
 
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              blogs={blogs}
-              createNewBlogRef={createNewBlogRef}
-              handleCreateNote={handleCreateNote}
-              handleDeleteNote={handleDeleteNote}
-              handleLikeClick={handleLikeClick}
-              user={user}
-              title={title}
-              setTitle={setTitle}
-              author={author}
-              setAuthor={setAuthor}
-              url={url}
-              setUrl={setUrl}
-            />
-          }
-        />
-        <Route
-          path="/blogs/:id"
-          element={
-            <SingleBlog
-              blogs={blogs}
-              handleLikeClick={handleLikeClick}
-              handleCreateComment={handleCreateComment}
-            />
-          }
-        />
-        <Route path="/users" element={<Users users={users} />} />
-        <Route path="/users/:id" element={<User users={users} />} />
-      </Routes>
+      <Container sx={{ mt: 3 }}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+        {notification && (
+          <Alert severity="success" sx={{ mb: 2 }}>
+            {notification}
+          </Alert>
+        )}
+
+        <Typography variant="h4" component="h1" gutterBottom>
+          Blogs app
+        </Typography>
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                blogs={blogs}
+                createNewBlogRef={createNewBlogRef}
+                handleCreateNote={handleCreateNote}
+                handleDeleteNote={handleDeleteNote}
+                handleLikeClick={handleLikeClick}
+                user={user}
+                title={title}
+                setTitle={setTitle}
+                author={author}
+                setAuthor={setAuthor}
+                url={url}
+                setUrl={setUrl}
+              />
+            }
+          />
+          <Route
+            path="/blogs/:id"
+            element={
+              <SingleBlog
+                blogs={blogs}
+                handleLikeClick={handleLikeClick}
+                handleCreateComment={handleCreateComment}
+              />
+            }
+          />
+          <Route path="/users" element={<Users users={users} />} />
+          <Route path="/users/:id" element={<User users={users} />} />
+        </Routes>
+      </Container>
     </Router>
   )
 }

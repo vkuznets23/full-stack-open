@@ -1,4 +1,5 @@
-import { Blog, CreateNewBlog, Togglable } from "../components";
+import { Blog, CreateNewBlog, Togglable } from '../components'
+import { Container, Typography } from '@mui/material'
 
 const Home = ({
   blogs,
@@ -14,12 +15,8 @@ const Home = ({
   url,
   setUrl,
 }) => (
-  <div>
-    <Togglable
-      buttonLabelShow="create blog"
-      buttonLabelHide="cancel"
-      ref={createNewBlogRef}
-    >
+  <Container sx={{ mt: 4 }}>
+    <Togglable buttonLabelShow="create blog" buttonLabelHide="cancel" ref={createNewBlogRef}>
       <CreateNewBlog
         title={title}
         setTitle={setTitle}
@@ -30,7 +27,11 @@ const Home = ({
         handleCreateNote={handleCreateNote}
       />
     </Togglable>
-    <h2>Blogs</h2>
+
+    <Typography variant="h5" component="h2" sx={{ mt: 4, mb: 2 }}>
+      Blogs
+    </Typography>
+
     {blogs.map((blog) => (
       <Blog
         key={blog.id}
@@ -40,6 +41,7 @@ const Home = ({
         handleLikeClick={handleLikeClick}
       />
     ))}
-  </div>
-);
-export default Home;
+  </Container>
+)
+
+export default Home

@@ -1,62 +1,63 @@
-import Togglable from "./Togglable";
-import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import { likeBlog } from "../slices/blogs";
-import { Link } from "react-router-dom";
+import Togglable from './Togglable'
+import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import { Card, CardContent, CardActions, Typography, Button, IconButton, Box } from '@mui/material'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Link as RouterLink } from 'react-router-dom'
 
 const Blog = ({ blog, handleDeleteNote, currentUser, handleLikeClick }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const blogFromStore = useSelector((state) =>
-    state.blogs.blogs.find((b) => b.id === blog.id),
-  );
+  const blogFromStore = useSelector((state) => state.blogs.blogs.find((b) => b.id === blog.id))
 
-  const likes = blogFromStore ? blogFromStore.likes : 0;
+  const likes = blogFromStore ? blogFromStore.likes : 0
 
-  // const handleLikeClick = () => {
-  //   dispatch(likeBlog(blog));
-  // };
-
-  // check for current user
-  const isOwner =
-    currentUser &&
-    (blog.user === currentUser.id || blog.user._id === currentUser.id);
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: "solid",
-    borderWidth: 1,
-    marginBottom: 5,
-  };
+  const isOwner = currentUser && (blog.user === currentUser.id || blog.user._id === currentUser.id)
 
   return (
-    <div data-testid="blog" style={blogStyle}>
-      <h3 data-testid="blog-title" style={{ margin: "2px 0" }}>
-        {/* {blog.title}  */}
-        <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-      </h3>
-      <Togglable buttonLabelShow="view" buttonLabelHide="hide">
-        <>
-          <p style={{ margin: "2px 0" }}>url: {blog.url}</p>
-          <div style={{ display: "flex" }}>
-            <p style={{ margin: "2px 0" }}>Likes: {likes}</p>
-            <button onClick={() => handleLikeClick(blog)}>like</button>
-          </div>
-          <p style={{ margin: "2px 0" }}>Author: {blog.author}</p>
-          {isOwner && (
-            <button
-              style={{ color: "red" }}
-              onClick={() => handleDeleteNote(blog.id)}
-            >
-              delete
-            </button>
-          )}
-        </>
-      </Togglable>
-    </div>
-  );
-};
+    <Card variant="outlined" sx={{ mb: 2 }} data-testid="blog">
+      <CardContent>
+        <Typography
+          variant="h6"
+          component={RouterLink}
+          to={`/blogs/${blog.id}`}
+          sx={{ textDecoration: 'none', color: 'inherit' }}
+          data-testid="blog-title"
+        >
+          {blog.title}
+        </Typography>
+        <Togglable buttonLabelShow="view" buttonLabelHide="hide">
+          <>
+            <Typography variant="body2" color="text.secondary">
+              url: {blog.url}
+            </Typography>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Typography variant="body2" color="text.secondary">
+                Likes: {likes}
+              </Typography>
+              <IconButton size="small" onClick={() => handleLikeClick(blog)} color="primary">
+                <FavoriteIcon fontSize="small" />
+              </IconButton>
+            </Box>
+            <Typography variant="body2">Author: {blog.author}</Typography>
+            {isOwner && (
+              <Button
+                variant="outlined"
+                color="error"
+                size="small"
+                startIcon={<DeleteIcon />}
+                onClick={() => handleDeleteNote(blog.id)}
+              >
+                delete
+              </Button>
+            )}
+          </>
+        </Togglable>
+      </CardContent>
+    </Card>
+  )
+}
 
 Blog.propTypes = {
   blog: PropTypes.shape({
@@ -79,6 +80,6 @@ Blog.propTypes = {
     name: PropTypes.string,
   }),
   handleDeleteNote: PropTypes.func.isRequired,
-};
+}
 
-export default Blog;
+export default Blog
