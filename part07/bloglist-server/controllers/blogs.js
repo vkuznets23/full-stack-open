@@ -84,4 +84,28 @@ router.put('/:id', userExtractor, async (req, res, next) => {
   }
 })
 
+router.post('/:id/comments', async (req, res, next) => {
+  try {
+    const blogId = req.params.id
+    const { content } = req.body
+
+    console.log('Content received:', content)
+
+    if (!content || content.trim() === '') {
+      return res.status(400).json({ error: 'Comment content required' })
+    }
+
+    const blog = await Blog.findById(blogId)
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog not found' })
+    }
+
+    blog.comments = blog.comments.concat(content)
+    const updatedBlog = await blog.save()
+    res.status(201).json(updatedBlog)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = router

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-enum Gender {
+export enum Gender {
   Male = 'male',
   Female = 'female',
   Other = 'other',
