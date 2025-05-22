@@ -22,6 +22,19 @@ const patients: Patient[] = [
           criteria: 'Healed',
         },
       },
+      {
+        id: 'entry-2',
+        date: '2022-05-10',
+        type: 'OccupationalHealthcare',
+        specialist: 'Dr. Strange',
+        employerName: 'NYPD',
+        description: 'Injured in the line of duty.',
+        diagnosisCodes: ['Z57.1'],
+        sickLeave: {
+          startDate: '2022-05-10',
+          endDate: '2022-05-20',
+        },
+      },
     ],
   },
   {

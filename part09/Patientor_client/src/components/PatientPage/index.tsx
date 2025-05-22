@@ -5,6 +5,7 @@ import { Diagnosis, Patient } from '../../types'
 import { useParams } from 'react-router-dom'
 import FemaleIcon from '@mui/icons-material/Female'
 import MaleIcon from '@mui/icons-material/Male'
+import EntryDetails from './Entry'
 
 interface PatientPageProps {
   diagnoses: Diagnosis[]
@@ -50,19 +51,7 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
       <ul>
         {patient.entries.map((entry) => (
           <li key={entry.id}>
-            <strong>{entry.date}</strong> – {entry.description}
-            {entry.diagnosisCodes && (
-              <ul>
-                {entry.diagnosisCodes.map((code) => {
-                  const diagnosis = diagnoses.find((d) => d.code === code)
-                  return (
-                    <li key={code}>
-                      {code} {diagnosis ? diagnosis.name : ''}
-                    </li>
-                  )
-                })}
-              </ul>
-            )}
+            <EntryDetails entry={entry} diagnoses={diagnoses} />
           </li>
         ))}
       </ul>
