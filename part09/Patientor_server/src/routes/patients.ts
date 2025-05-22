@@ -1,5 +1,5 @@
 import express, { Response } from 'express'
-import patientServices from '../services/patientsServices'
+import patientServices, { toNewEntry } from '../services/patientsServices'
 import { NonSensitivePatient } from '../types/patients'
 import { newPatientParser } from '../middleware/newPatientparser'
 
@@ -18,6 +18,21 @@ router.get('/:id', (req, res) => {
 router.post('/', newPatientParser, (req, res: Response) => {
   const addedPatient = patientServices.addPatient(req.body)
   res.json(addedPatient)
+})
+
+router.post('/:id/entries', (req, res) => {
+  try {
+    const id = req.params.id
+    const newEntry = toNewEntry(req.body)
+    const addedEntry = patientServices.addEntryToPatient(id, newEntry)
+    res.json(addedEntry)
+  } catch (error: unknown) {
+    let errorMessage = 'Something went wrong.'
+    if (error instanceof Error) {
+      errorMessage += ' Error: ' + error.message
+    }
+    res.status(400).send(errorMessage)
+  }
 })
 
 export default router

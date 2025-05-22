@@ -46,6 +46,17 @@ export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
 
+export type NewHospitalEntry = Omit<HospitalEntry, 'id'>
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, 'id'>
+export type NewOccupationalHealthcareEntry = Omit<
+  OccupationalHealthcareEntry,
+  'id'
+>
+export type NewEntry =
+  | NewHospitalEntry
+  | NewHealthCheckEntry
+  | NewOccupationalHealthcareEntry
+
 export interface Patient extends NewPatient {
   id: string
   entries: Entry[]
