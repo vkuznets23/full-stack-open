@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/semi */
 import axios from 'axios'
-import { Patient, PatientFormValues } from '../types'
+import { Entry, NewEntry, Patient, PatientFormValues } from '../types'
 
 import { apiBaseUrl } from '../constants'
 
@@ -21,8 +21,16 @@ const getPatient = async (id: string) => {
   return data
 }
 
+const createPatientEntry = async (id: string, object: NewEntry) => {
+  const { data } = await axios.post<Entry>(
+    `${apiBaseUrl}/patients/${id}/entries`,
+    object
+  )
+  return data
+}
 export default {
   getAll,
   create,
   getPatient,
+  createPatientEntry,
 }
